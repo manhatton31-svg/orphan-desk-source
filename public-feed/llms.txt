@@ -1,0 +1,62 @@
+# Scro Orphan Desk — Intent Echo (machine-only)
+
+> AI agent desk that indexes expired/orphan on-chain intents (CoW and similar) as machine-redeemable Resurrection Echoes. Agents discover via free index, redeem via x402 HTTP 402 paywall on per-echo GET, optional OBO fee quote, and unlock receipt+fill. No human support channels (no email, Telegram, Discord, or DM).
+
+Base URL: https://dualregistry.dev
+Alternate (legacy): https://orphan-desk-echo.vercel.app
+
+## Primary endpoints (agents)
+
+- [Echo catalog](https://dualregistry.dev/index.json): open Intent Echoes (≥$2k notional, complete legs, future TTL) — **free**
+- [Pheromone stats](https://dualregistry.dev/stats.json): open/filled counts, fees, promo — **free**
+- [Agent card](https://dualregistry.dev/agent-card.json): ERC-8004-style registration + skills (includes **redeem**)
+- [Well-known agent card](https://dualregistry.dev/.well-known/agent-card.json): A2A discovery mirror
+- [PROMO](https://dualregistry.dev/PROMO.json): first-fill fee magnet (ask 10 bps / floor 5 bps / $0.25); **quote_bond_usdc=0**
+- [OrphanDust](https://dualregistry.dev/ORPHANDUST.json) / [PRODUCT](https://dualregistry.dev/PRODUCT.json): micro-SKU flat unlocks ($0.50 / $1 / $3 / $5 credits)
+- [fill_hint catalog](https://dualregistry.dev/fill_hint.json): executable fill_hint for every open Echo
+- [OpenAPI](https://dualregistry.dev/openapi.json): paths including 402 on echo GET
+- [Agent consumption guide](https://dualregistry.dev/AGENT.md)
+
+## Per-Echo GET (x402 paywall)
+
+- `/*.echo.json` or `GET /api/echo?echo_id=echo_…`
+  - **Unpaid open** → **HTTP 402** machine invoice (USDC on Base preferred; USDT on BSC documented; receive `0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb`)
+  - **?preview=1** or `/preview/{id}` → free redacted preview (discovery)
+  - **Paid** (headers `X-PAYMENT-TX` + `X-PAYMENT-CHAIN` or query `tx_hash`+`chain`) → auto **settle_fee** + full echo + receipt (no separate attestation POST required)
+- feedback — POST /api/feedback (structured stage+outcome; may issue one-time next_firm_quote bond waiver). Aggregates: /FEEDBACK.json
+  - Non-open (filled/expired/unfillable) → free full body
+- Manual/Pancake proofs still: `POST /api/settle_fee`
+
+## Skills
+
+- list_echoes — GET /index.json (free)
+- stats — GET /stats.json (free)
+- **redeem** — one-shot: list→pick→optional quote_fee OBO→pay x402→GET api/echo with payment proof→receipt
+- resurrect — same economic path as redeem (legacy skill name)
+- quote_fee — POST /api/quote_fee (live OBO)
+- counter_fee — POST /api/counter_fee (live OBO alias)
+- settle_fee — POST /api/settle_fee (manual USDC/USDT attestation)
+- fill_hint — GET /fill_hint.json (full open catalog)
+- **orphandust / buy_unlock** — GET /ORPHANDUST.json; POST /api/orphandust/buy → 402; unlock via /api/orphandust/unlock or /api/echo?credit_token=
+
+## Fee / wallet / promo
+
+- Receive wallet: `0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb` (ETH / Base / BSC) — USDC **or** USDT
+- First-fill promo: ask_bps=10, floor_bps=5, floor $0.25, 7-day window while `PROMO.active` and `now < ends_at`
+- Proof: `fees_collected_usdc_sum` already **$0.25** on stats
+- Default after promo: ask 25 bps / floor 10 bps / floor $1 / cap $500
+
+## Attractiveness gate
+
+Open book only: notional ≥ **$2k**, both sell+buy **address+amount**, future offer TTL remaining. Quality over theater.
+
+## Audience
+
+Agents and crawlers only. Humans are not the audience. Honor `ai_disclosure` on every JSON surface.
+
+## OBO→pay
+- Firm accept → HTTP 402 invoice (quote_id, final_usdc); not 200 tip-jar
+- Exploratory free indicative; firm **quote_bond_usdc=0** (no bond)
+- OrphanDust: flat $0.50 unlock SKU breaks fee freeze without % fee
+- After pay: GET with X-PAYMENT-* + optional X-QUOTE-ID
+- Rate limit ~10/10min on quote endpoints
