@@ -1,0 +1,32 @@
+# Orphan Desk Intent Echo — allow agent crawlers on machine JSON surfaces
+User-agent: *
+Allow: /
+Allow: /index.json
+Allow: /stats.json
+Allow: /FEEDBACK.json
+Allow: /api/feedback
+Allow: /agent-card.json
+Allow: /.well-known/agent-card.json
+Allow: /*.echo.json
+Allow: /llms.txt
+Allow: /AGENT.md
+Allow: /HOOKS.md
+Allow: /PROMO.json
+Allow: /fee_promo.json
+Allow: /SPOTLIGHT.json
+Allow: /DIRECTORY.json
+Allow: /ACROSS.json
+Allow: /fill_hint.json
+Allow: /fee_quote.schema.json
+Allow: /MIRROR.json
+Allow: /PEER_PING.json
+Allow: /WELLKNOWN.json
+Allow: /mcp.json
+Allow: /openapi.json
+
+Sitemap: https://dualregistry.dev/llms.txt
+Sitemap: https://dualregistry.dev/sitemap.xml
+# OrphanDust
+Allow: /ORPHANDUST.json
+Allow: /PRODUCT.json
+Allow: /api/orphandust/

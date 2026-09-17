@@ -1,0 +1,10 @@
+{
+  "name": "orphan-desk-echo",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Orphan Desk public feed + OBO/x402 serverless APIs. Middleware uses native Response — do NOT add @vercel/edge.",
+  "dependencies": {},
+  "engines": {
+    "node": ">=18"
+  }
+}
