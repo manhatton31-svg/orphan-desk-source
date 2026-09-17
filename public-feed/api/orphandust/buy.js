@@ -14,6 +14,7 @@ const {
 const { feedbackMeta } = require('../_lib/feedback');
 const { parseBody, json } = require('../_lib/negotiate');
 const { verifyAndConsume, normalizeChain } = require('../_lib/verify_payment');
+const { spendOnForBuy } = require('../_lib/fillable');
 
 function corsExtra() {
   return {
@@ -81,6 +82,8 @@ module.exports = async function handler(req, res) {
 
   if (!payment) {
     const invoice = buildSkuInvoice(skuRow, req, { agent_id });
+    const spend_on = spendOnForBuy();
+    if (spend_on) invoice.spend_on = spend_on;
     return json(res, 402, invoice, {
       ...corsExtra(),
       'PAYMENT-REQUIRED': 'true',

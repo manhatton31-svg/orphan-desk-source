@@ -8,6 +8,8 @@ const {
 } = require('../_lib/orphandust');
 const { feedbackMeta } = require('../_lib/feedback');
 const { parseBody, json, loadEcho } = require('../_lib/negotiate');
+const { unfillableReason, goneBody } = require('../_lib/fillable');
+const { findEchoFile } = require('../_lib/settle');
 
 module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') {
@@ -49,6 +51,33 @@ module.exports = async function handler(req, res) {
   const agent_id = body.agent_id ? String(body.agent_id).slice(0, 128) : null;
   const ua = (req.headers && req.headers['user-agent']) || '';
 
+  // Load first so unfillable theater never burns a credit.
+  let loaded = await loadEcho(req, echo_id);
+  if (loaded.error) {
+    const found = findEchoFile(echo_id, null);
+    if (found) loaded = found;
+  }
+  if (loaded.error) {
+    return json(res, loaded.error === 'echo_not_found' ? 404 : 502, {
+      ok: false,
+      reason: loaded.error,
+      echo_id,
+      note: 'Credit was NOT consumed — echo missing from open book.',
+      skill: 'orphandust',
+    });
+  }
+
+  const echo = loaded.echo;
+  const gone = unfillableReason(echo);
+  if (gone === 'ttl_expired' || gone === 'same_asset') {
+    return json(res, 410, {
+      ...goneBody(echo, gone, req, baseUrl),
+      ok: false,
+      credit_consumed: false,
+      note: 'Echo is unfillable (expired TTL or same-asset). Credit was NOT consumed. Pick a live row from /index.json.',
+    });
+  }
+
   const spent = consumeCredit({ credit_token, agent_id, ua, echo_id });
   if (!spent.ok) {
     return json(res, 402, {
@@ -61,21 +90,6 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  const loaded = await loadEcho(req, echo_id);
-  if (loaded.error) {
-    return json(res, loaded.error === 'echo_not_found' ? 404 : 502, {
-      ok: false,
-      reason: loaded.error,
-      echo_id,
-      credit_token: spent.credit_token,
-      credits_remaining: spent.credits_remaining,
-      note: 'Credit was consumed but echo load failed — contact via feedback with balance_id',
-      balance_id: spent.balance_id,
-      skill: 'orphandust',
-    });
-  }
-
-  const echo = loaded.echo;
   return json(res, 200, {
     ok: true,
     unlocked_via: 'orphandust_credit',

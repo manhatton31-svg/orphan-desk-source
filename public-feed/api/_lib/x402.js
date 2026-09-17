@@ -6,6 +6,7 @@
 
 const RECEIVE = '0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb';
 const { feedbackMeta } = require('./feedback');
+const { cheaperUnlock } = require('./fillable');
 
 const USDC_BASE = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913';
 const USDT_BSC = '0x55d398326f99059fF775485246999027B3197955';
@@ -39,12 +40,14 @@ function buildInvoice(echo, req) {
     (echo._path) ||
     null;
   const payPath = pathName || `${echoId}.echo.json`;
+  const dust = cheaperUnlock(echo, req, baseUrl);
 
   return {
     schema_version: '1.0.0',
     type: 'x402_payment_required',
     status: 402,
     echo_id: echoId,
+    cheaper_unlock: dust,
     order_uid: echo.order_uid || null,
     chain: echo.chain || null,
     amount: String(amount),

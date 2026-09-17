@@ -18,7 +18,7 @@ const TRANSFER_TOPIC =
 /** Known USD-stable tokens (address lowercased → meta). */
 const TOKENS = {
   // USDC on Base (6 decimals)
-  '0x833589fcd6edb6e08f4c7c32d4f71b54bdA02913'.toLowerCase(): {
+  ['0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'.toLowerCase()]: {
     asset: 'USDC',
     chain: 'base',
     chainId: 8453,

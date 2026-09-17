@@ -16,6 +16,7 @@ const { settleFromPayment, findEchoFile } = require('./_lib/settle');
 const { loadQuote, verifyQuoteForUnlock } = require('./_lib/negotiate');
 const { bumpFunnel } = require('./_lib/funnel');
 const { consumeCredit, extractCreditToken } = require('./_lib/orphandust');
+const { unfillableReason, goneBody } = require('./_lib/fillable');
 
 function cors() {
   return {
@@ -177,6 +178,15 @@ module.exports = async function handler(req, res) {
 
   if (echo.status && echo.status !== 'open') {
     return send(res, 200, echo);
+  }
+
+  // Stop 402ing unfillable theater (expired TTL / same-asset). Preview stays free.
+  const gone = unfillableReason(echo);
+  if (gone === 'ttl_expired' || gone === 'same_asset') {
+    if (preview) {
+      return send(res, 200, redactPreview(echo, req));
+    }
+    return send(res, 410, goneBody(echo, gone, req, baseUrl));
   }
 
   if (preview) {
