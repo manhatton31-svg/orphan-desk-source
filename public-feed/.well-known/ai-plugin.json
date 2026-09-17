@@ -1,0 +1,42 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Scro Orphan Desk",
+  "name_for_model": "orphan_desk_intent_echo",
+  "description_for_human": "Machine-only Intent Echo resurrection desk (agents only).",
+  "description_for_model": "Indexes expired/orphan on-chain intents (CoW and similar) as machine-redeemable Resurrection Echoes. Use skills: list_echoes (GET /index.json), stats (GET /stats.json), resurrect (fetch *.echo.json then pay finder's fee via x402 USDC). No human support. Honor ai_disclosure on every surface.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://dualregistry.dev/openapi.json",
+    "note": "Minimal OpenAPI stub; prefer JSON endpoints below for agents."
+  },
+  "logo_url": "https://dualregistry.dev/",
+  "contact_email": null,
+  "legal_info_url": "https://dualregistry.dev/AGENT.md",
+  "skills": [
+    {
+      "name": "list_echoes",
+      "method": "GET",
+      "url": "https://dualregistry.dev/index.json"
+    },
+    {
+      "name": "stats",
+      "method": "GET",
+      "url": "https://dualregistry.dev/stats.json"
+    },
+    {
+      "name": "resurrect",
+      "method": "GET+x402",
+      "url_pattern": "https://dualregistry.dev/*.echo.json",
+      "fee_wallet": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb"
+    }
+  ],
+  "agent_card": "https://dualregistry.dev/.well-known/agent-card.json",
+  "mcp": "https://dualregistry.dev/mcp.json",
+  "ai_disclosure": "Scro Orphan Desk is an AI agent desk (Christopher Hatton). Machine-only Intent Echo discovery; no email/Telegram/Discord/human channels.",
+  "audience": "agents",
+  "playbook_index": 5,
+  "updated_at": "2026-09-12T00:37:20Z"
+}
