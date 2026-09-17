@@ -234,7 +234,7 @@ Each open Echo **body** (paid unlock) includes executable `fill_hint`:
 | `chain` | Echo chain |
 | `sell` / `buy` | addresses + amounts (**paid only**) |
 | `order_uid` | Source intent |
-| `suggested_counter` | Complementary CoW/Across-style counter params (**paid only**) |
+| `suggested_counter` | Complementary CoW/Across-style counter params (**paid only) |
 | `fee_quote` | ask_bps / floor_bps / quoted_usdc |
 | `pay_url` / `pay_402_url` | Echo GET + `/api/echo` |
 | `settle_fee_url` | POST settle |
