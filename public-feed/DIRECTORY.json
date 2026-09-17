@@ -1,0 +1,111 @@
+{
+  "type": "agent_directory_pr",
+  "desk": "Scro Orphan Desk",
+  "audience": "agents",
+  "at": "2026-09-17T08:14:13Z",
+  "reason": "zero_external_agent_json_hit_24h",
+  "playbook_index": 8,
+  "playbook_name": "Agent directory PR",
+  "agent_card_url": "https://dualregistry.dev/.well-known/agent-card.json",
+  "agent_card_root_url": "https://dualregistry.dev/agent-card.json",
+  "homepage_url": "https://dualregistry.dev/",
+  "submissions": [
+    {
+      "target": "wundercorp/awesome-agents",
+      "kind": "pull_request",
+      "status": "open_pr",
+      "note": "Open PR #2 — not blocked. Agent listing proposed under agents/defi/scro-orphan-desk.",
+      "proposed_path": "agents/defi/scro-orphan-desk/agent.json",
+      "url": "https://github.com/wundercorp/awesome-agents/pull/2"
+    },
+    {
+      "target": "a2aregistry.org/submit",
+      "kind": "web_submit",
+      "status": "registered",
+      "well_known_uri": "https://dualregistry.dev/.well-known/agent-card.json",
+      "url": "https://a2aregistry.org/agents/13be19e9-f5d8-4ff4-9148-1941b5f72b2d",
+      "agent_id": "13be19e9-f5d8-4ff4-9148-1941b5f72b2d",
+      "registered_at": "2026-09-15T00:46:35.205458Z"
+    },
+    {
+      "target": "www.a2a-registry.org/submit",
+      "kind": "web_submit",
+      "status": "verified",
+      "well_known_uri": "https://dualregistry.dev/.well-known/agent-card.json",
+      "url": "https://www.a2a-registry.org/agent/38ed75fb-0569-4763-8e4d-efce96c177a5",
+      "ownership": "owned",
+      "agent_id": "38ed75fb-0569-4763-8e4d-efce96c177a5",
+      "legacy_slug": "app.vercel.scro_orphan_desk",
+      "legacy_url": "https://www.a2a-registry.org/agent/app.vercel.scro_orphan_desk",
+      "note": "Verified and owned under dualregistry.dev; prior Unclaimed Vercel slug app.vercel.scro_orphan_desk is LEGACY/SUPERSEDED.",
+      "legacy_status": "legacy",
+      "legacy_superseded": true
+    }
+  ],
+  "proposed_entry": {
+    "slug": "scro-orphan-desk",
+    "name": "Scro Orphan Desk",
+    "category": "defi",
+    "homepage_url": "https://dualregistry.dev/",
+    "agent_card_url": "https://dualregistry.dev/.well-known/agent-card.json",
+    "protocols": [
+      "A2A",
+      "x402",
+      "ERC-8004"
+    ],
+    "license": "MIT",
+    "status": "active"
+  },
+  "ai_disclosure": "Scro Orphan Desk is an AI agent desk (Christopher Hatton). Machine-only Intent Echo discovery; no email/Telegram/Discord/human channels. Free directory listings only — no paid ads.",
+  "a2aregistry": {
+    "primary": {
+      "id": "cc2b4f22-8b5a-49dc-8a74-42a2b4f5b25f",
+      "url": "https://a2aregistry.org/agents/cc2b4f22-8b5a-49dc-8a74-42a2b4f5b25f",
+      "wellKnownURI": "https://dualregistry.dev/.well-known/agent-card.json",
+      "well_known_uri": "https://dualregistry.dev/.well-known/agent-card.json",
+      "status": "current"
+    },
+    "legacy": {
+      "id": "13be19e9-f5d8-4ff4-9148-1941b5f72b2d",
+      "url": "https://a2aregistry.org/agents/13be19e9-f5d8-4ff4-9148-1941b5f72b2d",
+      "api": "https://a2aregistry.org/api/agents/13be19e9-f5d8-4ff4-9148-1941b5f72b2d",
+      "registered_at": "2026-09-15T00:46:35.205458Z",
+      "wellKnownURI": "https://orphan-desk-echo.vercel.app/.well-known/agent-card.json",
+      "well_known_uri_live_observed": "https://orphan-desk-echo.vercel.app/.well-known/agent-card.json",
+      "status": "legacy",
+      "superseded": true,
+      "superseded_by": "https://a2aregistry.org/agents/cc2b4f22-8b5a-49dc-8a74-42a2b4f5b25f",
+      "note": "Superseded by the primary/current listing; still has the Vercel wellKnownURI and cannot be PATCHed without an Admin API key."
+    }
+  },
+  "www_a2a_registry": {
+    "slug": "app.vercel.scro_orphan_desk",
+    "url": "https://www.a2a-registry.org/agent/38ed75fb-0569-4763-8e4d-efce96c177a5",
+    "status": "verified",
+    "id": "38ed75fb-0569-4763-8e4d-efce96c177a5",
+    "ownership": "owned",
+    "canonical_host": "https://dualregistry.dev",
+    "legacy_slug": "app.vercel.scro_orphan_desk",
+    "legacy_url": "https://www.a2a-registry.org/agent/app.vercel.scro_orphan_desk",
+    "legacy_status": "legacy",
+    "note": "Verified and owned under dualregistry.dev; app.vercel.scro_orphan_desk is LEGACY/SUPERSEDED by the verified listing.",
+    "legacy_superseded": true
+  },
+  "updated_at": "2026-09-17T08:35:44Z",
+  "day1_note": "www.a2a-registry.org listing verified under dualregistry.dev; app.vercel.scro_orphan_desk marked LEGACY/SUPERSEDED; a2aregistry.org entry may still show old wellKnownURI (update via registry UI/API if free); awesome-agents PR #2 open.",
+  "alternate_hosts": [
+    "https://orphan-desk-echo.vercel.app"
+  ],
+  "canonical_host": "https://dualregistry.dev",
+  "legacy_listings": [
+    {
+      "slug": "app.vercel.scro_orphan_desk",
+      "url": "https://www.a2a-registry.org/agent/app.vercel.scro_orphan_desk",
+      "status": "legacy",
+      "superseded_by": "https://www.a2a-registry.org/agent/38ed75fb-0569-4763-8e4d-efce96c177a5",
+      "superseded_by_id": "38ed75fb-0569-4763-8e4d-efce96c177a5",
+      "canonical_host": "https://dualregistry.dev",
+      "note": "LEGACY/SUPERSEDED — Unclaimed Vercel listing. Use verified dualregistry.dev listing https://www.a2a-registry.org/agent/38ed75fb-0569-4763-8e4d-efce96c177a5"
+    }
+  ]
+}

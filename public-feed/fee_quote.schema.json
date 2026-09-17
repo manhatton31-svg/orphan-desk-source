@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dualregistry.dev/fee_quote.schema.json",
+  "title": "Orphan Desk OBO fee quote / counter",
+  "description": "Live OBO via POST /api/quote_fee|/api/counter_fee|/api/fee_quote. Exploratory (no firm): 200 indicative ask/floor. Firm: requires $0.10 USDC bond (bond_tx_hash) else 402 bond invoice. With bond: bid>=ask → HTTP 402 accept invoice (amount=final_usdc, quote_id, receive wallet, USDC/Base+USDT/BSC); floor<=bid<ask → 200 counter; bid<floor → 422. Rate limit ~10/10min. Quotes TTL 20m; quote_id unlocks legs after pay + GET with X-PAYMENT-* + X-QUOTE-ID.",
+  "oneOf": [
+    {
+      "title": "quote_fee_request",
+      "type": "object",
+      "required": [
+        "echo_id",
+        "bid_bps"
+      ],
+      "properties": {
+        "echo_id": {
+          "type": "string"
+        },
+        "bid_bps": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bid_usdc": {
+          "type": "string"
+        },
+        "agent_id": {
+          "type": "string"
+        },
+        "firm": {
+          "type": "boolean",
+          "description": "true for binding accept/counter; false/omit = indicative only"
+        },
+        "bond": {
+          "type": "boolean"
+        },
+        "bond_tx_hash": {
+          "type": "string",
+          "description": "0x… USDC bond payment to fee wallet"
+        },
+        "bond_chain": {
+          "type": "string"
+        },
+        "x402_payment_intent": {
+          "type": "object"
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "quote_fee",
+            "counter_fee"
+          ]
+        }
+      }
+    },
+    {
+      "title": "fee_quote_response",
+      "type": "object",
+      "required": [
+        "status",
+        "echo_id",
+        "ask_bps",
+        "floor_bps",
+        "receive_address",
+        "expires_at",
+        "quote_id"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "accept",
+            "counter",
+            "reject",
+            "indicative",
+            "bond_required"
+          ]
+        },
+        "decision": {
+          "enum": [
+            "accept",
+            "counter",
+            "reject",
+            "indicative",
+            "bond_required"
+          ]
+        },
+        "echo_id": {
+          "type": "string"
+        },
+        "final_bps": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "final_usdc": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "amount": {
+          "type": "string",
+          "description": "On accept-402: invoice amount (=final_usdc)"
+        },
+        "ask_bps": {
+          "type": "integer"
+        },
+        "floor_bps": {
+          "type": "integer"
+        },
+        "bid_bps": {
+          "type": "integer"
+        },
+        "x402": {
+          "type": "object"
+        },
+        "receive_address": {
+          "type": "string"
+        },
+        "receive_wallet": {
+          "type": "string"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "quote_id": {
+          "type": "string"
+        },
+        "ttl_seconds": {
+          "type": "integer"
+        },
+        "quote_bond_usdc": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        },
+        "rule": {
+          "type": "string"
+        },
+        "storage": {
+          "type": "string"
+        }
+      }
+    }
+  ],
+  "desk_defaults": {
+    "obo": true,
+    "ask_bps": 25,
+    "floor_bps": 10,
+    "receive_address": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
+    "ttl_seconds": 1200,
+    "quote_bond_usdc": "0.10",
+    "rate_limit": {
+      "max": 10,
+      "window_seconds": 600
+    },
+    "accept_http": 402,
+    "counter_http": 200,
+    "reject_http": 422,
+    "counter_rule": "midpoint_ceil",
+    "accept_rule": "at_bid_when_bid_gte_ask_returns_http_402_invoice",
+    "handler": "live",
+    "endpoints": {
+      "quote_fee": "https://dualregistry.dev/api/quote_fee",
+      "counter_fee": "https://dualregistry.dev/api/counter_fee",
+      "fee_quote": "https://dualregistry.dev/api/fee_quote"
+    }
+  },
+  "alternate_hosts": [
+    "https://orphan-desk-echo.vercel.app"
+  ]
+}
