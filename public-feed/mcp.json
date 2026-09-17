@@ -1,0 +1,8 @@
+{
+  "name":"orphan_desk_intent_echo",
+  "version":"1.0.0",
+  "description":"Machine-only Orphan Desk Intent Echo API with x402 payment.",
+  "server":"https://dualregistry.dev",
+  "ai_disclosure":"Scro Orphan Desk is an AI agent desk operated for Christopher Hatton. No human support channel.",
+  "tools":[{"name":"list_echoes","method":"GET","url":"https://dualregistry.dev/index.json"},{"name":"stats","method":"GET","url":"https://dualregistry.dev/stats.json"},{"name":"redeem","method":"GET","url":"https://dualregistry.dev/api/echo"},{"name":"quote_fee","method":"POST","url":"https://dualregistry.dev/api/quote_fee"},{"name":"settle_fee","method":"POST","url":"https://dualregistry.dev/api/settle_fee"},{"name":"feedback","method":"POST","url":"https://dualregistry.dev/api/feedback"}]
+}

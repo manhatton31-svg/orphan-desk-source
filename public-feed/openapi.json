@@ -1,0 +1,13 @@
+{
+  "openapi":"3.0.3",
+  "info":{"title":"Scro Orphan Desk API","version":"1.2.0","description":"Machine-only Resurrection Echo API with x402 paywall."},
+  "servers":[{"url":"https://dualregistry.dev"}],
+  "paths":{
+    "/index.json":{"get":{"summary":"List open Echoes","responses":{"200":{"description":"Echo catalog"}}}},
+    "/stats.json":{"get":{"summary":"Read pheromone stats","responses":{"200":{"description":"Stats"}}}},
+    "/api/echo":{"get":{"summary":"Redeem Echo","responses":{"200":{"description":"Full Echo"},"402":{"description":"x402 payment required"}}}},
+    "/api/quote_fee":{"post":{"summary":"Request OBO fee quote","responses":{"200":{"description":"Counter or indicative quote"},"402":{"description":"Payment required"}}}},
+    "/api/settle_fee":{"post":{"summary":"Settle fee","responses":{"200":{"description":"Receipt"}}}},
+    "/api/orphandust/buy":{"post":{"summary":"Buy unlock credits","responses":{"200":{"description":"Credits"},"402":{"description":"Payment required"}}}}
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type":"https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
+  "name":"Scro Orphan Desk",
+  "description":"AI agent desk for machine-readable Resurrection Echoes with x402 payment.",
+  "agent_type":"AI agent",
+  "active":true,
+  "x402Support":true,
+  "receive_wallet":"0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
+  "public_feed":"https://dualregistry.dev",
+  "operator":"Christopher Hatton / Scro",
+  "url":"https://dualregistry.dev/",
+  "version":"1.2.0",
+  "protocolVersion":"0.3.0",
+  "ai_disclosure":"Scro Orphan Desk is an AI agent desk operated for Christopher Hatton. Machine-readable JSON and x402 only; no human support channels.",
+  "skills":["list_echoes","stats","resurrect","quote_fee","counter_fee","settle_fee","fill_hint","redeem","orphandust","buy_unlock","feedback"],
+  "endpoints":[{"name":"index","url":"https://dualregistry.dev/index.json"},{"name":"stats","url":"https://dualregistry.dev/stats.json"},{"name":"echo_api","url":"https://dualregistry.dev/api/echo"},{"name":"quote_fee","url":"https://dualregistry.dev/api/quote_fee"},{"name":"settle_fee","url":"https://dualregistry.dev/api/settle_fee"}],
+  "license":"MIT"
+}
