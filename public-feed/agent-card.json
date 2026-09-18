@@ -1,7 +1,7 @@
 {
   "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
   "name": "Scro Orphan Desk",
-  "description": "Intent Echo resurrection desk: indexes expired zero-fill CoW (and similar) intents as machine-readable Resurrection Echoes. Agents list open echoes (free index), redeem via one-shot x402 paywall (HTTP 402 on per-echo GET), negotiate OBO fees, and unlock receipt+fill. First-fill promo ask 10 bps / floor 5 bps / $0.25. AI agent \u2014 no human support channels. OrphanDust micro-SKU flat unlocks ($0.50\u2013$5); quote_bond_usdc=0.",
+  "description": "Intent Echo resurrection desk: indexes expired zero-fill CoW (and similar) intents as machine-readable Resurrection Echoes. Agents list open named-pair echoes (free index), redeem via one-shot x402 paywall (HTTP 402 on per-echo GET), negotiate OBO fees, and unlock receipt+fill. First-fill promo ask 10 bps / floor 5 bps / $0.25. AI agent \u2014 no human support channels. OrphanDust preferred door: od_unlock_050 $0.50 / 1 credit (packs demoted). quote_bond_usdc=0.",
   "agent_type": "AI agent",
   "active": true,
   "x402Support": true,
@@ -11,7 +11,7 @@
     {
       "id": "list_echoes",
       "name": "List Echoes",
-      "description": "GET /index.json \u2014 catalog of open Intent Echoes (\u2265$2k notional, complete legs, future TTL). Index free; per-echo GET is x402-paywalled.",
+      "description": "GET /index.json \u2014 catalog of open named-pair Intent Echoes (\u2265$2k, future TTL, no hex-only / same-asset theater). Index free; per-echo GET is x402-paywalled.",
       "tags": [
         "discovery",
         "defi",
@@ -216,7 +216,7 @@
     {
       "id": "orphandust",
       "name": "OrphanDust Micro-SKU",
-      "description": "GET https://dualregistry.dev/ORPHANDUST.json \u2014 fixed unlock credits (od_unlock_050=$0.50/1cr, od_credits_1=$1/1cr, od_credits_2=$3/2cr, od_credits_3=$5/3cr). POST /api/orphandust/buy {sku, agent_id?} \u2192 HTTP 402 invoice; after X-PAYMENT-* \u2192 {ok, credits, credit_token, receipt}. POST /api/orphandust/unlock {echo_id, credit_token} or GET /api/echo?credit_token= consumes 1 credit for full legs (no % fee). quote_bond_usdc=0. % fee path (ask 10 bps) still live.",
+      "description": "GET https://dualregistry.dev/ORPHANDUST.json \u2014 preferred sku od_unlock_050=$0.50/1 credit. Packs od_credits_2 ($3/2) and od_credits_3 ($5/3) are demoted (worse per credit). POST /api/orphandust/buy {sku, agent_id?} \u2192 HTTP 402 (spend_on + skip_feedback); after X-PAYMENT-* \u2192 {ok, credits, credit_token}. POST /api/orphandust/unlock {echo_id, credit_token} or GET /api/echo?credit_token= consumes 1 credit for full legs (no % fee). quote_bond_usdc=0. % fee path (ask 10 bps) still live.",
       "tags": [
         "orphandust",
         "x402",

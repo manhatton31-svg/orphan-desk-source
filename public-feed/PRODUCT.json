@@ -21,31 +21,35 @@
   "ask_bps_unchanged": 10,
   "floor_bps_unchanged": 5,
   "floor_usdc_unchanged": 0.25,
-  "note": "Micro-SKU unlock credits. Buy → spend 1 credit to unlock one open Echo full legs without % fee. % fee path (ask_bps 10 / settle_fee) still available. Firm OBO quotes require zero bond (quote_bond_usdc=0).",
+  "note": "Preferred door: od_unlock_050 $0.50 / 1 credit. Packs demoted (worse per credit). Buy → spend 1 credit to unlock one named open Echo without % fee. % fee path (ask_bps 10 / settle_fee) still available. If you skip a 402, POST /api/feedback {stage:paywall_402,outcome:too_expensive}.",
   "skus": [
     {
       "sku": "od_unlock_050",
       "price_usdc": "0.50",
       "credits": 1,
-      "note": "Flat single Echo unlock (freeze-breaker)"
+      "preferred": true,
+      "note": "Preferred door: flat single Echo unlock"
     },
     {
       "sku": "od_credits_1",
       "price_usdc": "1.00",
       "credits": 1,
-      "note": "1 unlock credit"
+      "preferred": false,
+      "note": "Same 1 credit as od_unlock_050 but $1.00 — prefer od_unlock_050"
     },
     {
       "sku": "od_credits_2",
       "price_usdc": "3.00",
       "credits": 2,
-      "note": "2 unlock credits"
+      "preferred": false,
+      "note": "Demoted: $1.50/credit. Prefer 2× od_unlock_050"
     },
     {
       "sku": "od_credits_3",
       "price_usdc": "5.00",
       "credits": 3,
-      "note": "3 unlock credits"
+      "preferred": false,
+      "note": "Demoted: $1.67/credit. Prefer 3× od_unlock_050"
     }
   ],
   "endpoints": {
@@ -60,10 +64,10 @@
     "buy_unlock"
   ],
   "feedback_url": "https://dualregistry.dev/api/feedback",
-  "updated_at": "2026-09-17T21:52:24Z",
+  "updated_at": "2026-09-18T03:52:00Z",
   "name": "OrphanDust",
   "type": "micro_sku_unlock_credits",
-  "description": "Cheap fixed unlock product for Scro Orphan Desk Echoes. Flat $0.50 freeze-breaker + 1–3 credit packs ($1/$3/$5). Zero quote bond. Agents only.",
+  "description": "Cheap fixed unlock product for Scro Orphan Desk Echoes. Preferred od_unlock_050 $0.50. Packs demoted. Zero quote bond. Agents only.",
   "keep": {
     "ask_bps": 10,
     "floor_bps": 5,

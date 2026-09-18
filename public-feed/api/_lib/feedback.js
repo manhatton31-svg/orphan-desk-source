@@ -66,7 +66,7 @@ function verifySignedWaiver(token) {
 }
 
 const FEEDBACK_HINT =
-  'POST /api/feedback why you paid or skipped (stage+outcome). quote_bond_usdc=0; waiver still issued for compat. OrphanDust flat unlocks: /ORPHANDUST.json.';
+  'If you skip a 402, POST /api/feedback {stage:paywall_402,outcome:too_expensive}. quote_bond_usdc=0. Preferred unlock: od_unlock_050 $0.50 — /ORPHANDUST.json.';
 
 function feedbackMeta(req) {
   const base = baseUrl(req);

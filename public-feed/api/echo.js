@@ -301,7 +301,7 @@ module.exports = async function handler(req, res) {
     unlock: `${baseUrl(req)}/api/orphandust/unlock`,
     flat_unlock_sku: 'od_unlock_050',
     flat_unlock_usdc: '0.50',
-    note: 'Or buy OrphanDust micro-SKU credits to unlock without % fee (quote_bond_usdc=0).',
+    note: 'Preferred: od_unlock_050 $0.50 vs % fee. Packs od_credits_2/3 demoted (worse per credit). If you skip, POST /api/feedback {stage:paywall_402,outcome:too_expensive}.',
   };
   if (quoteId) {
     invoice.quote_id = quoteId;

@@ -1,6 +1,6 @@
 /**
  * Open-book fillable gate for Orphan Desk.
- * Drop expired TTL and same-asset pairs (WETH→WETH etc) from agent surfaces.
+ * Drop expired TTL, same-asset, and opaque/hex pairs from agent surfaces.
  * Used by Echo GET (stop 402ing theater), buy 402 spend_on, and catalog prune.
  */
 const fs = require('fs');
@@ -9,6 +9,7 @@ const path = require('path');
 const DUST_SKU = 'od_unlock_050';
 const DUST_PRICE = 0.5;
 const DUST_PRICE_USDC = '0.50';
+const NAMED_TICKER = /^[A-Za-z][A-Za-z0-9]{1,11}$/;
 
 function pairOf(echo) {
   if (!echo || typeof echo !== 'object') return null;
@@ -30,6 +31,18 @@ function symbolsOf(echo) {
     (echo.buy && echo.buy.symbol) ||
     null;
   return [sell, buy];
+}
+
+function isNamedTicker(sym) {
+  if (!sym) return false;
+  const s = String(sym).trim();
+  if (!s || s.includes('…') || /0x/i.test(s)) return false;
+  return NAMED_TICKER.test(s);
+}
+
+function isOpaquePair(echo) {
+  const [a, b] = symbolsOf(echo);
+  return !isNamedTicker(a) || !isNamedTicker(b);
 }
 
 function isSameAsset(echo) {
@@ -81,6 +94,7 @@ function unfillableReason(echo, now) {
   if (st && st !== 'open') return st;
   if (isExpired(echo, n)) return 'ttl_expired';
   if (isSameAsset(echo)) return 'same_asset';
+  if (isOpaquePair(echo)) return 'opaque_pair';
   return null;
 }
 
@@ -106,6 +120,9 @@ function cheapestFillable(echoes, now) {
     if (aFee !== bFee) return aFee - bFee;
     const c = pairClarity(a) - pairClarity(b);
     if (c !== 0) return c;
+    const ta = ttlRemainingS(a, n);
+    const tb = ttlRemainingS(b, n);
+    if ((tb || 0) !== (ta || 0)) return (tb || 0) - (ta || 0);
     const na = a.notional_usd || 0;
     const nb = b.notional_usd || 0;
     return na - nb;
@@ -118,6 +135,18 @@ function saveUsdc(fee) {
   return (fee - DUST_PRICE).toFixed(2);
 }
 
+function skipFeedback(base) {
+  return {
+    post: `${base}/api/feedback`,
+    if_skip: {
+      stage: 'paywall_402',
+      outcome: 'too_expensive',
+      optional: ['self_compute_usdc', 'note'],
+    },
+    hint: 'If you skip this buy, POST /api/feedback {stage:paywall_402,outcome:too_expensive}. Do not invent a human channel.',
+  };
+}
+
 function cheaperUnlock(echo, req, baseUrlFn) {
   const fee = feeOf(echo);
   const echoId = echo && echo.echo_id;
@@ -125,6 +154,7 @@ function cheaperUnlock(echo, req, baseUrlFn) {
   try {
     if (typeof baseUrlFn === 'function') base = baseUrlFn(req);
   } catch (_) {}
+  const ttl = ttlRemainingS(echo);
   return {
     preferred: true,
     sku: DUST_SKU,
@@ -134,6 +164,7 @@ function cheaperUnlock(echo, req, baseUrlFn) {
     fee_usdc: Number.isFinite(fee) ? fee.toFixed(2) : null,
     echo_id: echoId || null,
     pair: pairOf(echo),
+    ttl_remaining_s: ttl,
     buy: {
       method: 'POST',
       url: `${base}/api/orphandust/buy`,
@@ -145,8 +176,9 @@ function cheaperUnlock(echo, req, baseUrlFn) {
       body: { echo_id: echoId, credit_token: 'odc_…' },
       get: `${base}/api/echo?echo_id=${encodeURIComponent(echoId || '')}&credit_token=odc_…`,
     },
+    skip_feedback: skipFeedback(base),
     note: Number.isFinite(fee)
-      ? `Unlock this Echo for ${DUST_PRICE_USDC} USDC (${DUST_SKU}) instead of the ${fee.toFixed(2)} % fee.`
+      ? `Unlock this Echo for ${DUST_PRICE_USDC} USDC (${DUST_SKU}) instead of the ${fee.toFixed(2)} % fee.${ttl != null ? ` TTL ${ttl}s.` : ''} Preferred vs od_credits_2/3 (worse per credit).`
       : `Unlock this Echo for ${DUST_PRICE_USDC} USDC (${DUST_SKU}) instead of the % fee.`,
   };
 }
@@ -169,7 +201,8 @@ function spendOnFromEcho(echo, now) {
       post: '/api/orphandust/unlock',
       body: { echo_id: echo.echo_id, credit_token: 'odc_…' },
     },
-    note: 'Cheapest live fillable Echo — spend 1 OrphanDust credit after buy.',
+    skip_feedback: skipFeedback('https://dualregistry.dev'),
+    note: 'Cheapest live named fillable Echo — spend 1 OrphanDust credit after buy. Prefer od_unlock_050 over pack SKUs.',
   };
 }
 
@@ -202,6 +235,11 @@ function goneBody(echo, reason, req, baseUrlFn) {
   try {
     if (typeof baseUrlFn === 'function') base = baseUrlFn(req);
   } catch (_) {}
+  const notes = {
+    same_asset: 'Dropped from open book — same-asset pair (unfillable theater). Not 402.',
+    opaque_pair: 'Dropped from open book — opaque/hex pair (agents cannot name the asset). Not 402.',
+    ttl_expired: 'Dropped from open book — expired TTL. Not 402.',
+  };
   return {
     schema_version: '1.0.0',
     type: 'echo_unfillable',
@@ -212,17 +250,15 @@ function goneBody(echo, reason, req, baseUrlFn) {
     pair: pairOf(echo),
     expired_at: echo && echo.expired_at,
     chain: echo && echo.chain,
-    note:
-      reason === 'same_asset'
-        ? 'Dropped from open book — same-asset pair (unfillable theater). Not 402.'
-        : 'Dropped from open book — expired TTL. Not 402.',
+    note: notes[reason] || 'Dropped from open book. Not 402.',
     index_url: `${base}/index.json`,
     fill_hint_url: `${base}/fill_hint.json`,
     orphandust: {
       catalog: `${base}/ORPHANDUST.json`,
       buy: `${base}/api/orphandust/buy`,
-      note: 'Buy od_unlock_050 to unlock a live fillable Echo from /index.json',
+      note: 'Buy od_unlock_050 to unlock a live named fillable Echo from /index.json',
     },
+    skip_feedback: skipFeedback(base),
     skill: 'redeem',
   };
 }
@@ -233,6 +269,8 @@ module.exports = {
   DUST_PRICE_USDC,
   pairOf,
   symbolsOf,
+  isNamedTicker,
+  isOpaquePair,
   isSameAsset,
   isExpired,
   ttlRemainingS,

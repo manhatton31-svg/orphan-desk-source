@@ -13,10 +13,30 @@ const USDC_BASE = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913';
 const USDT_BSC = '0x55d398326f99059fF775485246999027B3197955';
 
 const SKUS = {
-  od_unlock_050: { price_usdc: '0.50', credits: 1, note: 'Flat single Echo unlock (freeze-breaker)' },
-  od_credits_1: { price_usdc: '1.00', credits: 1, note: '1 unlock credit' },
-  od_credits_2: { price_usdc: '3.00', credits: 2, note: '2 unlock credits' },
-  od_credits_3: { price_usdc: '5.00', credits: 3, note: '3 unlock credits' },
+  od_unlock_050: {
+    price_usdc: '0.50',
+    credits: 1,
+    preferred: true,
+    note: 'Preferred door: flat 1 Echo unlock. Buy this, not the packs.',
+  },
+  od_credits_1: {
+    price_usdc: '1.00',
+    credits: 1,
+    preferred: false,
+    note: 'Same 1 credit as od_unlock_050 but $1.00 — prefer od_unlock_050 at $0.50',
+  },
+  od_credits_2: {
+    price_usdc: '3.00',
+    credits: 2,
+    preferred: false,
+    note: 'Demoted: $1.50/credit. Prefer 2× od_unlock_050 ($0.50 each).',
+  },
+  od_credits_3: {
+    price_usdc: '5.00',
+    credits: 3,
+    preferred: false,
+    note: 'Demoted: $1.67/credit. Prefer 3× od_unlock_050 ($0.50 each).',
+  },
 };
 
 const CREDIT_TTL_MS = 90 * 24 * 60 * 60 * 1000;
@@ -139,8 +159,14 @@ function catalogBody(req) {
       token: USDT_BSC,
     },
     quote_bond_usdc: 0,
-    note: 'POST {sku, agent_id?} — unpaid → HTTP 402 SKU invoice; with X-PAYMENT-* → credit_token',
-    skus: Object.entries(SKUS).map(([sku, x]) => ({ sku, price_usdc: x.price_usdc, credits: x.credits, note: x.note })),
+    note: 'Preferred SKU is od_unlock_050 ($0.50 / 1 credit). Packs od_credits_2/3 cost more per credit — demoted. POST {sku, agent_id?} — unpaid → HTTP 402; with X-PAYMENT-* → credit_token',
+    skus: Object.entries(SKUS).map(([sku, x]) => ({
+      sku,
+      price_usdc: x.price_usdc,
+      credits: x.credits,
+      preferred: !!x.preferred,
+      note: x.note,
+    })),
     endpoints: {
       catalog: `${base}/ORPHANDUST.json`,
       product: `${base}/PRODUCT.json`,
@@ -166,6 +192,7 @@ function buildSkuInvoice(row, req, extra) {
     http_status: 402,
     sku: row.sku,
     credits: row.credits,
+    preferred: !!row.preferred,
     amount,
     amount_usdc: amount,
     price_usdc: amount,
@@ -208,7 +235,12 @@ function buildSkuInvoice(row, req, extra) {
       body: { sku: row.sku, agent_id: extra && extra.agent_id ? extra.agent_id : undefined },
       headers: 'X-PAYMENT-TX + X-PAYMENT-CHAIN (+ optional X-PAYMENT-ASSET / X-PAYMENT-AMOUNT)',
     },
-    note: `Pay ${amount} USDC (Base preferred) or USDT (BSC) for ${row.credits} unlock credit(s). Then retry POST with payment proof → credit_token.`,
+    note: `Pay ${amount} USDC (Base preferred) or USDT (BSC) for ${row.credits} unlock credit(s). Then retry POST with payment proof → credit_token. Preferred door is od_unlock_050 at $0.50.`,
+    skip_feedback: {
+      post: `${base}/api/feedback`,
+      if_skip: { stage: 'paywall_402', outcome: 'too_expensive' },
+      hint: 'If you skip, POST /api/feedback {stage:paywall_402,outcome:too_expensive}.',
+    },
     ai_disclosure:
       'Scro OrphanDust is an AI agent micro-SKU (Christopher Hatton). Fixed unlock credits — agents only. No human channel. Pay USDC (Base preferred) or USDT (BSC) to fee wallet.',
     ...feedbackMeta(req),

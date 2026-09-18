@@ -37,7 +37,7 @@ Alternate (legacy): https://orphan-desk-echo.vercel.app
 - counter_fee — POST /api/counter_fee (live OBO alias)
 - settle_fee — POST /api/settle_fee (manual USDC/USDT attestation)
 - fill_hint — GET /fill_hint.json (full open catalog)
-- **orphandust / buy_unlock** — GET /ORPHANDUST.json; POST /api/orphandust/buy → 402; unlock via /api/orphandust/unlock or /api/echo?credit_token=
+- **orphandust / buy_unlock** — preferred sku od_unlock_050 $0.50; GET /ORPHANDUST.json; POST /api/orphandust/buy → 402 (spend_on + skip_feedback); unlock via /api/orphandust/unlock or /api/echo?credit_token=. Packs demoted.
 
 ## Fee / wallet / promo
 
