@@ -5,15 +5,20 @@
 - Vercel project: `orphan-desk-echo` (`prj_c4G2E8dK72jBKsovdx94mULlFxjM`)
 - Team: `team_YY4Cuwg6dmgWa9eNW0aFAvjV`
 - Deploy root: `public-feed/`
+- Git auto-deploy: this repo `main` → `orphan-desk-echo` (Root Directory `public-feed`)
 - NOT the JSON echo mirror at `manhatton31-svg/orphan-desk-echo`
 
-## Grok Build #1 (approved)
+## Grok Build #1 (live)
 
 Prune expired + same-asset from catalogs; match count_open; cheapest-live SPOTLIGHT; Echo 402 `cheaper_unlock` (od_unlock_050 $0.50); buy 402 `spend_on`. No SKU/bps/wallet/Stripe changes. Keep RPC verify_payment fail-closed.
 
 ## Deploy (production) — after every #1/#2/#3 patch
 
-Deploy root: `public-feed/` — NEVER deploy repo root, NEVER the JSON mirror repo.
+**Preferred:** `git push origin main` (auto-deploys `public-feed/` to dualregistry.dev).
+
+Deploy root is `public-feed/` — NEVER deploy repo root, NEVER the JSON mirror repo.
+
+Fallback CLI if auto-deploy is down:
 
 ```bash
 cd public-feed
@@ -26,7 +31,7 @@ Then curl-verify:
 ```bash
 curl -sS https://dualregistry.dev/index.json | head
 curl -sS -o /dev/null -w "%{http_code}" https://dualregistry.dev/.well-known/agent-card.json
-# expect 200; report deploy URL / id from CLI output
+# expect 200; report deploy URL / id
 ```
 
 ### Hard rules
