@@ -17,6 +17,7 @@ const { loadQuote, verifyQuoteForUnlock } = require('./_lib/negotiate');
 const { bumpFunnel } = require('./_lib/funnel');
 const { consumeCredit, extractCreditToken } = require('./_lib/orphandust');
 const { unfillableReason, goneBody } = require('./_lib/fillable');
+const { specAccepts, specHeaders } = require('./_lib/x402_spec');
 
 function cors() {
   return {
@@ -311,7 +312,13 @@ module.exports = async function handler(req, res) {
     };
   }
   return send(res, 402, invoice, {
-    'PAYMENT-REQUIRED': 'true',
-    'X-Payment-Required': 'true',
+    ...specHeaders(
+      specAccepts({
+        resource: `${baseUrl(req)}/api/orphandust/buy`,
+        description: 'OrphanDust od_unlock_050 — unlock 1 named Echo (preferred vs % fee)',
+        amountUsdc: '0.50',
+      }),
+      '0.50'
+    ),
   });
 };

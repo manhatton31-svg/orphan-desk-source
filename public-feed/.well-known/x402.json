@@ -1,0 +1,30 @@
+{
+  "x402Version": 1,
+  "name": "Scro Orphan Desk",
+  "description": "Named-pair CoW resurrection echoes. Preferred door: POST /api/orphandust/buy sku od_unlock_050 — $0.50 USDC on Base for 1 Echo unlock. Index is free at /index.json. No human channel.",
+  "homepage": "https://dualregistry.dev",
+  "payTo": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
+  "resources": [
+    {
+      "url": "https://dualregistry.dev/api/orphandust/buy",
+      "method": "POST",
+      "description": "Buy od_unlock_050 — 1 named Echo unlock credit",
+      "mimeType": "application/json",
+      "priceUsd": "0.50"
+    }
+  ],
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "base",
+      "maxAmountRequired": "500000",
+      "resource": "https://dualregistry.dev/api/orphandust/buy",
+      "description": "OrphanDust od_unlock_050 — unlock 1 named Echo",
+      "mimeType": "application/json",
+      "payTo": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
+      "maxTimeoutSeconds": 600,
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "extra": { "name": "USDC", "version": "2" }
+    }
+  ]
+}

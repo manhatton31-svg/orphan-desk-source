@@ -8,6 +8,6 @@
     "/api/echo":{"get":{"summary":"Redeem Echo","responses":{"200":{"description":"Full Echo"},"402":{"description":"x402 payment required"}}}},
     "/api/quote_fee":{"post":{"summary":"Request OBO fee quote","responses":{"200":{"description":"Counter or indicative quote"},"402":{"description":"Payment required"}}}},
     "/api/settle_fee":{"post":{"summary":"Settle fee","responses":{"200":{"description":"Receipt"}}}},
-    "/api/orphandust/buy":{"post":{"summary":"Buy unlock credits","responses":{"200":{"description":"Credits"},"402":{"description":"Payment required"}}}}
+    "/api/orphandust/buy":{"get":{"summary":"HTTP 402 invoice for od_unlock_050 ($0.50 USDC Base)"},"post":{"summary":"Buy unlock credits","responses":{"200":{"description":"Credits"},"402":{"description":"Payment required"}}}}
   }
 }

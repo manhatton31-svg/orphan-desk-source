@@ -7,6 +7,7 @@
 const RECEIVE = '0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb';
 const { feedbackMeta } = require('./feedback');
 const { cheaperUnlock } = require('./fillable');
+const { specAccepts, specEnvelope } = require('./x402_spec');
 
 const USDC_BASE = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913';
 const USDT_BSC = '0x55d398326f99059fF775485246999027B3197955';
@@ -41,13 +42,20 @@ function buildInvoice(echo, req) {
     null;
   const payPath = pathName || `${echoId}.echo.json`;
   const dust = cheaperUnlock(echo, req, baseUrl);
+  const dustAccepts = specAccepts({
+    resource: `${base}/api/orphandust/buy`,
+    description: 'OrphanDust od_unlock_050 — unlock 1 named Echo (preferred vs % fee)',
+    amountUsdc: '0.50',
+  });
 
   return {
     schema_version: '1.0.0',
     type: 'x402_payment_required',
     status: 402,
+    x402Version: 1,
     echo_id: echoId,
     cheaper_unlock: dust,
+    accepts: dustAccepts,
     order_uid: echo.order_uid || null,
     chain: echo.chain || null,
     amount: String(amount),

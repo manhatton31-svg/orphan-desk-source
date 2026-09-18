@@ -46,8 +46,8 @@
   ],
   "rewrites": [
     {
-      "source": "/FEEDBACK.json",
-      "destination": "/api/feedback_public"
+      "source": "/.well-known/x402",
+      "destination": "/.well-known/x402.json"
     },
     {
       "source": "/api/echo/:id",

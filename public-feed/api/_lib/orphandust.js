@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const { feedbackMeta } = require('./feedback');
+const { specAccepts, specEnvelope } = require('./x402_spec');
 
 const RECEIVE = '0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb';
 const USDC_BASE = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913';
@@ -184,20 +185,28 @@ function catalogBody(req) {
 function buildSkuInvoice(row, req, extra) {
   const base = baseUrl(req);
   const amount = String(row.price_usdc);
+  const resource = `${base}/api/orphandust/buy`;
+  const accepts = specAccepts({
+    resource,
+    description: `OrphanDust ${row.sku} — ${row.credits} named Echo unlock credit(s)`,
+    amountUsdc: amount,
+  });
   return {
     schema_version: '1.0.0',
     type: 'x402_payment_required',
     product: 'OrphanDust',
     status: 402,
     http_status: 402,
+    x402Version: 1,
     sku: row.sku,
     credits: row.credits,
-    preferred: !!row.preferred,
+    sku_preferred: !!row.preferred,
     amount,
     amount_usdc: amount,
     price_usdc: amount,
     receive_wallet: RECEIVE,
     pay_to: RECEIVE,
+    accepts,
     preferred: {
       asset: 'USDC',
       network: 'base',

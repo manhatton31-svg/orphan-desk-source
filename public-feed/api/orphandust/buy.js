@@ -15,6 +15,8 @@ const { feedbackMeta } = require('../_lib/feedback');
 const { parseBody, json } = require('../_lib/negotiate');
 const { verifyAndConsume, normalizeChain } = require('../_lib/verify_payment');
 const { spendOnForBuy } = require('../_lib/fillable');
+const { specAccepts, specHeaders, extractXPayment } = require('../_lib/x402_spec');
+const { settleXPayment } = require('../_lib/x402_facilitator');
 
 function corsExtra() {
   return {
@@ -28,10 +30,18 @@ module.exports = async function handler(req, res) {
     return json(res, 204, {}, corsExtra());
   }
   if (req.method === 'GET') {
-    return json(res, 200, {
-      ...catalogBody(req),
-      skill: 'orphandust',
-      note: 'POST {sku, agent_id?} — unpaid → HTTP 402 SKU invoice; with X-PAYMENT-* → credit_token',
+    const skuRow = getSku('od_unlock_050');
+    const invoice = buildSkuInvoice(skuRow, req, { agent_id: null });
+    const spend_on = spendOnForBuy();
+    if (spend_on) invoice.spend_on = spend_on;
+    const accepts = specAccepts({
+      resource: `${baseUrl(req)}/api/orphandust/buy`,
+      description: 'OrphanDust od_unlock_050 — unlock 1 named Echo',
+      amountUsdc: skuRow.price_usdc,
+    });
+    return json(res, 402, invoice, {
+      ...corsExtra(),
+      ...specHeaders(accepts, skuRow.price_usdc),
     });
   }
   if (req.method !== 'POST') {
@@ -81,13 +91,49 @@ module.exports = async function handler(req, res) {
   }
 
   if (!payment) {
+    const xpay = extractXPayment(req) || (body && (body.x_payment || body.payment));
+    if (xpay) {
+      const resource = `${baseUrl(req)}/api/orphandust/buy`;
+      const accepts = specAccepts({
+        resource,
+        description: `OrphanDust ${skuRow.sku} — ${skuRow.credits} named Echo unlock credit(s)`,
+        amountUsdc: skuRow.price_usdc,
+      });
+      const settled = await settleXPayment(xpay, accepts[0]);
+      if (!settled.ok) {
+        return json(res, 402, {
+          ok: false,
+          reason: settled.error || 'x_payment_settle_failed',
+          fail_closed: true,
+          sku: skuRow.sku,
+          note: 'X-PAYMENT facilitator settle failed. Pay USDC Transfer on Base and retry with X-PAYMENT-TX, or a valid X-PAYMENT for od_unlock_050.',
+          skill: 'orphandust',
+        }, { ...corsExtra(), ...specHeaders(accepts, skuRow.price_usdc) });
+      }
+      payment = {
+        tx_hash: settled.tx_hash,
+        chain: 'base',
+        asset: 'USDC',
+        amount: skuRow.price_usdc,
+        payer: settled.payer || null,
+        via: 'x402_facilitator',
+        facilitator: settled.facilitator,
+      };
+    }
+  }
+
+  if (!payment) {
     const invoice = buildSkuInvoice(skuRow, req, { agent_id });
     const spend_on = spendOnForBuy();
     if (spend_on) invoice.spend_on = spend_on;
+    const accepts = specAccepts({
+      resource: `${baseUrl(req)}/api/orphandust/buy`,
+      description: `OrphanDust ${skuRow.sku} — ${skuRow.credits} named Echo unlock credit(s)`,
+      amountUsdc: skuRow.price_usdc,
+    });
     return json(res, 402, invoice, {
       ...corsExtra(),
-      'PAYMENT-REQUIRED': 'true',
-      'X-Payment-Required': 'true',
+      ...specHeaders(accepts, skuRow.price_usdc),
     });
   }
 
