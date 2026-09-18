@@ -15,8 +15,8 @@ const { feedbackMeta } = require('../_lib/feedback');
 const { parseBody, json } = require('../_lib/negotiate');
 const { verifyAndConsume, normalizeChain } = require('../_lib/verify_payment');
 const { spendOnForBuy } = require('../_lib/fillable');
-const { specAccepts, specHeaders, extractXPayment } = require('../_lib/x402_spec');
-const { settleXPayment } = require('../_lib/x402_facilitator');
+const { specAccepts, specHeaders, extractXPayment, pickAccept } = require('../_lib/x402_spec');
+const { settleXPayment, decodePayment } = require('../_lib/x402_facilitator');
 
 function corsExtra() {
   return {
@@ -99,7 +99,7 @@ module.exports = async function handler(req, res) {
         description: `OrphanDust ${skuRow.sku} — ${skuRow.credits} named Echo unlock credit(s)`,
         amountUsdc: skuRow.price_usdc,
       });
-      const settled = await settleXPayment(xpay, accepts[0]);
+      const settled = await settleXPayment(xpay, pickAccept(accepts, decodePayment(xpay)) || accepts[0]);
       if (!settled.ok) {
         return json(res, 402, {
           ok: false,
