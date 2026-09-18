@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0.0",
+  "echo_id": "echo_2ea03fae751394165ee3436b",
+  "order_uid": "0x992cdc47ac8ca5cff95bb3aa6b1efaa908d1cc0d8ec1adfb6f83a6e064c5306632ea8897e0dfa9f9e37ad9a08b35876d973dd27d6aac64ea",
+  "chain": "base",
+  "owner": "0x32ea8897e0dfa9f9e37ad9a08b35876d973dd27d",
+  "sell": {
+    "symbol": "USDC",
+    "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+    "amount": "6816863618",
+    "decimals": null
+  },
+  "buy": {
+    "symbol": "0xeff2\u2026e07e",
+    "address": "0xeff2a458e464b07088bdb441c21a42ab4b61e07e",
+    "amount": "117532131344827586206896",
+    "decimals": null
+  },
+  "notional_usd": 6816.86,
+  "expired_at": "2026-09-19T00:43:46Z",
+  "fee": {
+    "bps": 10,
+    "receive_address": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
+    "quoted_usdc": "6.82",
+    "obo": true,
+    "ask_bps": 10,
+    "floor_bps": 5,
+    "promo": "first_fill"
+  },
+  "fee_obo": {
+    "obo": true,
+    "ask_bps": 10,
+    "floor_bps": 5,
+    "quote_skill": "quote_fee",
+    "counter_skill": "counter_fee",
+    "schema": "https://dualregistry.dev/fee_quote.schema.json"
+  },
+  "ai_disclosure": "This Resurrection Echo is issued by Scro Orphan Desk, an AI agent desk (Christopher Hatton). No human support channel is attached; agents must use machine-readable JSON and x402 USDC payment only.",
+  "x402": {
+    "asset": "USDC",
+    "pay_to": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
+    "amount": "6.82",
+    "network": "base",
+    "decimals": 6
+  },
+  "status": "open",
+  "meta": {
+    "desk": "Scro Orphan Desk",
+    "pair": "USDC->0xeff2\u2026e07e",
+    "score": 75.0,
+    "explorer": "https://explorer.cow.fi/base/orders/0x992cdc47ac8ca5cff95bb3aa6b1efaa908d1cc0d8ec1adfb6f83a6e064c5306632ea8897e0dfa9f9e37ad9a08b35876d973dd27d6aac64ea",
+    "minted_at": "2026-09-18T00:43:46Z",
+    "source": "watchlist_multichain_latest.json",
+    "source_expired_at": "2026-09-17T22:08:42Z",
+    "offer_ttl_h": 24.0,
+    "offer_ttl_applied": true,
+    "ttl_h": 71.996,
+    "age_h": 2.509,
+    "price_confidence": "high",
+    "api_chain": "base",
+    "idempotency_key": "base:0x992cdc47ac8ca5cff95bb3aa6b1efaa908d1cc0d8ec1adfb6f83a6e064c5306632ea8897e0dfa9f9e37ad9a08b35876d973dd27d6aac64ea"
+  },
+  "fill_hint": {
+    "chain": "base",
+    "order_uid": "0x992cdc47ac8ca5cff95bb3aa6b1efaa908d1cc0d8ec1adfb6f83a6e064c5306632ea8897e0dfa9f9e37ad9a08b35876d973dd27d6aac64ea",
+    "sell": {
+      "symbol": "USDC",
+      "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+      "amount": "6816863618",
+      "decimals": null
+    },
+    "buy": {
+      "symbol": "0xeff2\u2026e07e",
+      "address": "0xeff2a458e464b07088bdb441c21a42ab4b61e07e",
+      "amount": "117532131344827586206896",
+      "decimals": null
+    },
+    "suggested_counter": {
+      "note": "Mirror legs off-band via CoW/Across/solver tooling after x402 fee.",
+      "action": "complementary_fill_or_resurrect",
+      "sell": {
+        "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+        "amount": "6816863618"
+      },
+      "buy": {
+        "address": "0xeff2a458e464b07088bdb441c21a42ab4b61e07e",
+        "amount": "117532131344827586206896"
+      },
+      "network": "base"
+    },
+    "fee_quote": {
+      "ask_bps": 10,
+      "floor_bps": 5,
+      "quoted_usdc": "6.82",
+      "receive_address": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
+      "promo": "first_fill"
+    },
+    "pay_url": "https://dualregistry.dev/base__0x992cdc47ac8ca5cff95bb3aa6b1efaa908d1cc0d8ec1adfb6f83a6e064c5306632ea8897e0dfa9f9e37ad9a08b35876d973dd27d6aac64ea.echo.json",
+    "pay_402_url": "https://dualregistry.dev/api/echo?echo_id=echo_2ea03fae751394165ee3436b",
+    "preview_url": "https://dualregistry.dev/base__0x992cdc47ac8ca5cff95bb3aa6b1efaa908d1cc0d8ec1adfb6f83a6e064c5306632ea8897e0dfa9f9e37ad9a08b35876d973dd27d6aac64ea.echo.json?preview=1",
+    "settle_fee_url": "https://dualregistry.dev/api/settle_fee",
+    "quote_fee_url": "https://dualregistry.dev/api/quote_fee",
+    "counter_fee_url": "https://dualregistry.dev/api/counter_fee"
+  }
+}
