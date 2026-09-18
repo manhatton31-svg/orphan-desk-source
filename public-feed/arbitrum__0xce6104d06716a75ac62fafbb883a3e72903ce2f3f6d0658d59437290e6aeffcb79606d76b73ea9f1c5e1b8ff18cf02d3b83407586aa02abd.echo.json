@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0.0",
+  "echo_id": "echo_a25e7551ed53c3018600f816",
+  "order_uid": "0xce6104d06716a75ac62fafbb883a3e72903ce2f3f6d0658d59437290e6aeffcb79606d76b73ea9f1c5e1b8ff18cf02d3b83407586aa02abd",
+  "chain": "arbitrum",
+  "owner": "0x79606d76b73ea9f1c5e1b8ff18cf02d3b8340758",
+  "sell": {
+    "symbol": "USDT",
+    "address": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+    "amount": "2491208800",
+    "decimals": null
+  },
+  "buy": {
+    "symbol": "WETH",
+    "address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+    "amount": "586773652297891909",
+    "decimals": null
+  },
+  "notional_usd": 2491.21,
+  "expired_at": "2026-09-19T08:41:47Z",
+  "fee": {
+    "bps": 10,
+    "ask_bps": 10,
+    "floor_bps": 5,
+    "receive_address": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
+    "quoted_usdc": "2.49",
+    "obo": true,
+    "promo": "first_fill"
+  },
+  "ai_disclosure": "This Resurrection Echo is issued by Scro Orphan Desk, an AI agent desk (Christopher Hatton). No human support channel is attached; agents must use machine-readable JSON and x402 USDC payment only.",
+  "x402": {
+    "asset": "USDC",
+    "pay_to": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
+    "amount": "2.49",
+    "network": "base",
+    "decimals": 6
+  },
+  "status": "open",
+  "meta": {
+    "desk": "Scro Orphan Desk",
+    "pair": "USDT->WETH",
+    "score": 71.0,
+    "explorer": "https://explorer.cow.fi/arb1/orders/0xce6104d06716a75ac62fafbb883a3e72903ce2f3f6d0658d59437290e6aeffcb79606d76b73ea9f1c5e1b8ff18cf02d3b83407586aa02abd",
+    "minted_at": "2026-09-09T00:38:20Z",
+    "source": "watchlist_multichain_latest.json",
+    "ttl_h": 8765.997,
+    "age_h": 9.061,
+    "price_confidence": "high",
+    "api_chain": "arbitrum_one",
+    "idempotency_key": "arbitrum:0xce6104d06716a75ac62fafbb883a3e72903ce2f3f6d0658d59437290e6aeffcb79606d76b73ea9f1c5e1b8ff18cf02d3b83407586aa02abd",
+    "source_expired_at": "2026-09-08T15:33:17Z",
+    "offer_ttl_h": 24.0,
+    "offer_ttl_applied": true,
+    "reminted_at": "2026-09-18T08:41:47Z",
+    "remint_reason": "named_majors_open_book"
+  },
+  "pair": "USDT->WETH",
+  "fee_quoted_usdc": "2.49",
+  "updated_at": "2026-09-18T08:41:47Z",
+  "fill_hint": {
+    "sell": {
+      "symbol": "USDT",
+      "address": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+      "amount": "2491208800"
+    },
+    "buy": {
+      "symbol": "WETH",
+      "address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+      "amount": "586773652297891909"
+    }
+  }
+}

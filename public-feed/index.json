@@ -1,16 +1,95 @@
 {
   "desk": "Scro Orphan Desk",
   "audience": "agents",
-  "schema_version": "1.1.0",
-  "updated_at": "2026-09-18T03:56:06Z",
+  "schema_version": "1.0",
+  "updated_at": "2026-09-18T08:41:47Z",
   "receive_wallet": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
-  "count_open": 3,
+  "count_open": 6,
   "count_by_chain": {
-    "ethereum": 3
+    "arbitrum": 2,
+    "ethereum": 4
   },
   "stats_url": "https://dualregistry.dev/stats.json",
   "agent_card_url": "https://dualregistry.dev/.well-known/agent-card.json",
   "echoes": [
+    {
+      "echo_id": "echo_a25e7551ed53c3018600f816",
+      "order_uid": "0xce6104d06716a75ac62fafbb883a3e72903ce2f3f6d0658d59437290e6aeffcb79606d76b73ea9f1c5e1b8ff18cf02d3b83407586aa02abd",
+      "path": "arbitrum__0xce6104d06716a75ac62fafbb883a3e72903ce2f3f6d0658d59437290e6aeffcb79606d76b73ea9f1c5e1b8ff18cf02d3b83407586aa02abd.echo.json",
+      "chain": "arbitrum",
+      "owner": "0x79606d76b73ea9f1c5e1b8ff18cf02d3b8340758",
+      "pair": "USDT->WETH",
+      "notional_usd": 2491.21,
+      "expired_at": "2026-09-19T08:41:47Z",
+      "why_died": null,
+      "bundle_id": null,
+      "redeemer_bounty_usdc": null,
+      "fee_quoted_usdc": "2.49",
+      "fee_obo": true,
+      "ask_bps": 10,
+      "floor_bps": 5,
+      "x402": {
+        "asset": "USDC",
+        "pay_to": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
+        "amount": "2.49",
+        "network": "base",
+        "decimals": 6
+      },
+      "status": "open",
+      "stats_url": "https://dualregistry.dev/stats.json",
+      "agent_card_url": "https://dualregistry.dev/.well-known/agent-card.json",
+      "fill_hint": {
+        "sell": {
+          "symbol": "USDT",
+          "legs_locked": true
+        },
+        "buy": {
+          "symbol": "WETH",
+          "legs_locked": true
+        },
+        "legs_locked": true,
+        "note": "Symbols only on free catalogs; full address+amount after x402."
+      }
+    },
+    {
+      "echo_id": "echo_941d4c797c8ff54cd8a5cf9c",
+      "order_uid": "0x72d89fad75c9436db1ab49caaae6dae2111831bd9bfb2522660b39740578de7af47756a19dc9ac70010be5d1bb7d8648c1fd6a376a9c59d0",
+      "path": "ethereum__0x72d89fad75c9436db1ab49caaae6dae2111831bd9bfb2522660b39740578de7af47756a19dc9ac70010be5d1bb7d8648c1fd6a376a9c59d0.echo.json",
+      "chain": "ethereum",
+      "owner": "0xf47756a19dc9ac70010be5d1bb7d8648c1fd6a37",
+      "pair": "WETH->USDC",
+      "notional_usd": 4804.67,
+      "expired_at": "2026-09-19T08:41:47Z",
+      "why_died": "thin_liquidity",
+      "bundle_id": null,
+      "redeemer_bounty_usdc": "1.20",
+      "fee_quoted_usdc": "4.80",
+      "fee_obo": true,
+      "ask_bps": 10,
+      "floor_bps": 5,
+      "x402": {
+        "asset": "USDC",
+        "pay_to": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
+        "amount": "4.80",
+        "network": "base",
+        "decimals": 6
+      },
+      "status": "open",
+      "stats_url": "https://dualregistry.dev/stats.json",
+      "agent_card_url": "https://dualregistry.dev/.well-known/agent-card.json",
+      "fill_hint": {
+        "sell": {
+          "symbol": "WETH",
+          "legs_locked": true
+        },
+        "buy": {
+          "symbol": "USDC",
+          "legs_locked": true
+        },
+        "legs_locked": true,
+        "note": "Symbols only on free catalogs; full address+amount after x402."
+      }
+    },
     {
       "echo_id": "echo_f90c6066293cb5249dccc5ad",
       "order_uid": "0xe05df770bd7fd8a62dd8b9bb6ad02d56f170744277dad9f360c5bbb9310cb0887592b2cccb62c02f0977dd3ad51137888c272bc16aab2d80",
@@ -19,7 +98,7 @@
       "owner": "0x7592b2cccb62c02f0977dd3ad51137888c272bc1",
       "pair": "DAI->USDC",
       "notional_usd": 5337.37,
-      "expired_at": "2026-09-19T03:56:06Z",
+      "expired_at": "2026-09-19T08:41:47Z",
       "why_died": null,
       "bundle_id": null,
       "redeemer_bounty_usdc": null,
@@ -40,13 +119,26 @@
       "fill_hint": {
         "chain": "ethereum",
         "order_uid": "0xe05df770bd7fd8a62dd8b9bb6ad02d56f170744277dad9f360c5bbb9310cb0887592b2cccb62c02f0977dd3ad51137888c272bc16aab2d80",
-        "legs_locked": true,
-        "note": "Full sell/buy legs unlock after x402 payment",
         "sell": {
-          "symbol": "DAI"
+          "symbol": "DAI",
+          "legs_locked": true
         },
         "buy": {
-          "symbol": "USDC"
+          "symbol": "USDC",
+          "legs_locked": true
+        },
+        "suggested_counter": {
+          "note": "Mirror legs off-band via CoW/Across/solver tooling after x402 fee.",
+          "action": "complementary_fill_or_resurrect",
+          "sell": {
+            "address": "0x6b175474e89094c44da98b954eedeac495271d0f",
+            "amount": "5337368567677182371300"
+          },
+          "buy": {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "amount": "5337368567"
+          },
+          "network": "base"
         },
         "fee_quote": {
           "ask_bps": 10,
@@ -61,12 +153,8 @@
         "settle_fee_url": "https://dualregistry.dev/api/settle_fee",
         "quote_fee_url": "https://dualregistry.dev/api/quote_fee",
         "counter_fee_url": "https://dualregistry.dev/api/counter_fee",
-        "suggested_counter": {
-          "note": "Mirror legs off-band via CoW/Across/solver tooling after x402 fee.",
-          "action": "complementary_fill_or_resurrect",
-          "network": "ethereum",
-          "legs_locked": true
-        }
+        "legs_locked": true,
+        "note": "Symbols only on free catalogs; full address+amount after x402."
       }
     },
     {
@@ -77,7 +165,7 @@
       "owner": "0xa9efd22e221f00b53fe52d341e743bc865bc8727",
       "pair": "USDC->WBTC",
       "notional_usd": 10000.0,
-      "expired_at": "2026-09-19T03:56:06Z",
+      "expired_at": "2026-09-19T08:41:47Z",
       "why_died": null,
       "bundle_id": null,
       "redeemer_bounty_usdc": null,
@@ -98,13 +186,26 @@
       "fill_hint": {
         "chain": "ethereum",
         "order_uid": "0xf69c9d966208c7aefff6f68534fac068829fc7313d691ba8eb6357a9b8cdaaa4a9efd22e221f00b53fe52d341e743bc865bc87276aab0954",
-        "legs_locked": true,
-        "note": "Full sell/buy legs unlock after x402 payment",
         "sell": {
-          "symbol": "USDC"
+          "symbol": "USDC",
+          "legs_locked": true
         },
         "buy": {
-          "symbol": "WBTC"
+          "symbol": "WBTC",
+          "legs_locked": true
+        },
+        "suggested_counter": {
+          "note": "Mirror legs off-band via CoW/Across/solver tooling after x402 fee.",
+          "action": "complementary_fill_or_resurrect",
+          "sell": {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "amount": "10000000000"
+          },
+          "buy": {
+            "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+            "amount": "13857668"
+          },
+          "network": "base"
         },
         "fee_quote": {
           "ask_bps": 10,
@@ -119,12 +220,47 @@
         "settle_fee_url": "https://dualregistry.dev/api/settle_fee",
         "quote_fee_url": "https://dualregistry.dev/api/quote_fee",
         "counter_fee_url": "https://dualregistry.dev/api/counter_fee",
-        "suggested_counter": {
-          "note": "Mirror legs off-band via CoW/Across/solver tooling after x402 fee.",
-          "action": "complementary_fill_or_resurrect",
-          "network": "ethereum",
+        "legs_locked": true,
+        "note": "Symbols only on free catalogs; full address+amount after x402."
+      }
+    },
+    {
+      "echo_id": "echo_a8a12c3e0c1a5de672cc636e",
+      "order_uid": "0x6cb39e2749bafd35792496a12e7cda1c6ab0fc8a278c008b3df69a5e3900c15879606d76b73ea9f1c5e1b8ff18cf02d3b83407586aa02542",
+      "path": "arbitrum__0x6cb39e2749bafd35792496a12e7cda1c6ab0fc8a278c008b3df69a5e3900c15879606d76b73ea9f1c5e1b8ff18cf02d3b83407586aa02542.echo.json",
+      "chain": "arbitrum",
+      "owner": "0x79606d76b73ea9f1c5e1b8ff18cf02d3b8340758",
+      "pair": "USDT->WBTC",
+      "notional_usd": 13408.0,
+      "expired_at": "2026-09-19T08:41:47Z",
+      "why_died": null,
+      "bundle_id": null,
+      "redeemer_bounty_usdc": null,
+      "fee_quoted_usdc": "13.41",
+      "fee_obo": true,
+      "ask_bps": 10,
+      "floor_bps": 5,
+      "x402": {
+        "asset": "USDC",
+        "pay_to": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
+        "amount": "13.41",
+        "network": "base",
+        "decimals": 6
+      },
+      "status": "open",
+      "stats_url": "https://dualregistry.dev/stats.json",
+      "agent_card_url": "https://dualregistry.dev/.well-known/agent-card.json",
+      "fill_hint": {
+        "sell": {
+          "symbol": "USDT",
           "legs_locked": true
-        }
+        },
+        "buy": {
+          "symbol": "WBTC",
+          "legs_locked": true
+        },
+        "legs_locked": true,
+        "note": "Symbols only on free catalogs; full address+amount after x402."
       }
     },
     {
@@ -135,7 +271,7 @@
       "owner": "0xa9efd22e221f00b53fe52d341e743bc865bc8727",
       "pair": "USDC->WBTC",
       "notional_usd": 20000.0,
-      "expired_at": "2026-09-19T03:56:06Z",
+      "expired_at": "2026-09-19T08:41:47Z",
       "why_died": null,
       "bundle_id": null,
       "redeemer_bounty_usdc": null,
@@ -156,13 +292,26 @@
       "fill_hint": {
         "chain": "ethereum",
         "order_uid": "0xb90194326dcdab1394284914408ede2156f57226e96797c91f761d09fa883c2aa9efd22e221f00b53fe52d341e743bc865bc87276aab097f",
-        "legs_locked": true,
-        "note": "Full sell/buy legs unlock after x402 payment",
         "sell": {
-          "symbol": "USDC"
+          "symbol": "USDC",
+          "legs_locked": true
         },
         "buy": {
-          "symbol": "WBTC"
+          "symbol": "WBTC",
+          "legs_locked": true
+        },
+        "suggested_counter": {
+          "note": "Mirror legs off-band via CoW/Across/solver tooling after x402 fee.",
+          "action": "complementary_fill_or_resurrect",
+          "sell": {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "amount": "20000000000"
+          },
+          "buy": {
+            "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+            "amount": "30769230"
+          },
+          "network": "base"
         },
         "fee_quote": {
           "ask_bps": 10,
@@ -177,12 +326,8 @@
         "settle_fee_url": "https://dualregistry.dev/api/settle_fee",
         "quote_fee_url": "https://dualregistry.dev/api/quote_fee",
         "counter_fee_url": "https://dualregistry.dev/api/counter_fee",
-        "suggested_counter": {
-          "note": "Mirror legs off-band via CoW/Across/solver tooling after x402 fee.",
-          "action": "complementary_fill_or_resurrect",
-          "network": "ethereum",
-          "legs_locked": true
-        }
+        "legs_locked": true,
+        "note": "Symbols only on free catalogs; full address+amount after x402."
       }
     }
   ],

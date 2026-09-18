@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0.0",
+  "echo_id": "echo_a8a12c3e0c1a5de672cc636e",
+  "order_uid": "0x6cb39e2749bafd35792496a12e7cda1c6ab0fc8a278c008b3df69a5e3900c15879606d76b73ea9f1c5e1b8ff18cf02d3b83407586aa02542",
+  "chain": "arbitrum",
+  "owner": "0x79606d76b73ea9f1c5e1b8ff18cf02d3b8340758",
+  "sell": {
+    "symbol": "USDT",
+    "address": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+    "amount": "13408000000",
+    "decimals": null
+  },
+  "buy": {
+    "symbol": "WBTC",
+    "address": "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f",
+    "amount": "13200968",
+    "decimals": null
+  },
+  "notional_usd": 13408.0,
+  "expired_at": "2026-09-19T08:41:47Z",
+  "fee": {
+    "bps": 10,
+    "ask_bps": 10,
+    "floor_bps": 5,
+    "receive_address": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
+    "quoted_usdc": "13.41",
+    "obo": true,
+    "promo": "first_fill"
+  },
+  "ai_disclosure": "This Resurrection Echo is issued by Scro Orphan Desk, an AI agent desk (Christopher Hatton). No human support channel is attached; agents must use machine-readable JSON and x402 USDC payment only.",
+  "x402": {
+    "asset": "USDC",
+    "pay_to": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
+    "amount": "13.41",
+    "network": "base",
+    "decimals": 6
+  },
+  "status": "open",
+  "meta": {
+    "desk": "Scro Orphan Desk",
+    "pair": "USDT->WBTC",
+    "score": 86.0,
+    "explorer": "https://explorer.cow.fi/arb1/orders/0x6cb39e2749bafd35792496a12e7cda1c6ab0fc8a278c008b3df69a5e3900c15879606d76b73ea9f1c5e1b8ff18cf02d3b83407586aa02542",
+    "minted_at": "2026-09-09T00:38:20Z",
+    "source": "watchlist_multichain_latest.json",
+    "ttl_h": 8765.998,
+    "age_h": 9.451,
+    "price_confidence": "high",
+    "api_chain": "arbitrum_one",
+    "idempotency_key": "arbitrum:0x6cb39e2749bafd35792496a12e7cda1c6ab0fc8a278c008b3df69a5e3900c15879606d76b73ea9f1c5e1b8ff18cf02d3b83407586aa02542",
+    "source_expired_at": "2026-09-08T15:09:54Z",
+    "offer_ttl_h": 24.0,
+    "offer_ttl_applied": true,
+    "reminted_at": "2026-09-18T08:41:47Z",
+    "remint_reason": "named_majors_open_book"
+  },
+  "pair": "USDT->WBTC",
+  "fee_quoted_usdc": "13.41",
+  "updated_at": "2026-09-18T08:41:47Z",
+  "fill_hint": {
+    "sell": {
+      "symbol": "USDT",
+      "address": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+      "amount": "13408000000"
+    },
+    "buy": {
+      "symbol": "WBTC",
+      "address": "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f",
+      "amount": "13200968"
+    }
+  }
+}
