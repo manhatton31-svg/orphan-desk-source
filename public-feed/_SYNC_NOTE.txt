@@ -1,0 +1,1 @@
+count_open sync in progress — do not deploy from git until catalogs match live (11)
