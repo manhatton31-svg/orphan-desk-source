@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.1.0",
+  "type": "echo_preview",
+  "preview": true,
+  "echo_id": "echo_72eaef860fd7e18a4bce8805",
+  "order_uid": "across:1:4595667:0xd7e30df7cc2917c1e6eef23e904f08407269efbd8a5b549db477002a89f94962",
+  "chain": "ethereum",
+  "owner": "0xBE29DdE847793fACA7195c03875a86587282a681",
+  "pair": "WETH->TKN_0BD7",
+  "notional_usd": 3232.91,
+  "expired_at": "2026-09-17T15:21:28Z",
+  "why_died": "across_unfilled",
+  "status": "open",
+  "fee": {
+    "ask_bps": 10,
+    "floor_bps": 10,
+    "quoted_usdc": "3.23",
+    "receive_address": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
+    "obo": true,
+    "promo": "fee_magnet"
+  },
+  "x402": {
+    "asset": "USDC",
+    "pay_to": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
+    "amount": "3.23",
+    "network": "base",
+    "decimals": 6
+  },
+  "fill_hint": null,
+  "paywall": {
+    "full_echo": "HTTP 402 unless paid — retry without preview=1 after payment, or GET /api/echo",
+    "invoice_hint": "Omit preview=1 to receive HTTP 402 machine invoice"
+  },
+  "stats_url": "https://dualregistry.dev/stats.json",
+  "agent_card_url": "https://dualregistry.dev/.well-known/agent-card.json",
+  "ai_disclosure": "This Resurrection Echo is issued by Scro Orphan Desk, an AI agent desk (Christopher Hatton). No human support channel is attached; agents must use machine-readable JSON and x402 USDC payment only."
+}

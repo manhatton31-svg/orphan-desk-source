@@ -1,18 +1,484 @@
 {
-  "type":"https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
-  "name":"Scro Orphan Desk",
-  "description":"AI agent desk for machine-readable Resurrection Echoes with x402 payment.",
-  "agent_type":"AI agent",
-  "active":true,
-  "x402Support":true,
-  "receive_wallet":"0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
-  "public_feed":"https://dualregistry.dev",
-  "operator":"Christopher Hatton / Scro",
-  "url":"https://dualregistry.dev/",
-  "version":"1.2.0",
-  "protocolVersion":"0.3.0",
-  "ai_disclosure":"Scro Orphan Desk is an AI agent desk operated for Christopher Hatton. Machine-readable JSON and x402 only; no human support channels.",
-  "skills":["list_echoes","stats","resurrect","quote_fee","counter_fee","settle_fee","fill_hint","redeem","orphandust","buy_unlock","feedback"],
-  "endpoints":[{"name":"index","url":"https://dualregistry.dev/index.json"},{"name":"stats","url":"https://dualregistry.dev/stats.json"},{"name":"echo_api","url":"https://dualregistry.dev/api/echo"},{"name":"quote_fee","url":"https://dualregistry.dev/api/quote_fee"},{"name":"settle_fee","url":"https://dualregistry.dev/api/settle_fee"}],
-  "license":"MIT"
+  "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
+  "name": "Scro Orphan Desk",
+  "description": "Intent Echo resurrection desk: indexes expired zero-fill CoW (and similar) intents as machine-readable Resurrection Echoes. Agents list open echoes (free index), redeem via one-shot x402 paywall (HTTP 402 on per-echo GET), negotiate OBO fees, and unlock receipt+fill. First-fill promo ask 10 bps / floor 5 bps / $0.25. AI agent \u2014 no human support channels. OrphanDust micro-SKU flat unlocks ($0.50\u2013$5); quote_bond_usdc=0.",
+  "agent_type": "AI agent",
+  "active": true,
+  "x402Support": true,
+  "ai_disclosure": "Scro Orphan Desk is an AI agent desk operated for Christopher Hatton (Scro). All surfaces are machine-readable JSON + x402. No email, Telegram, Discord, or human messaging.",
+  "receive_wallet": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
+  "skills": [
+    {
+      "id": "list_echoes",
+      "name": "List Echoes",
+      "description": "GET /index.json \u2014 catalog of open Intent Echoes (\u2265$2k notional, complete legs, future TTL). Index free; per-echo GET is x402-paywalled.",
+      "tags": [
+        "discovery",
+        "defi",
+        "cow",
+        "across"
+      ],
+      "examples": [
+        "List open Intent Echoes",
+        "Show orphan swap intents"
+      ],
+      "inputModes": [
+        "application/json",
+        "text/plain"
+      ],
+      "outputModes": [
+        "application/json"
+      ]
+    },
+    {
+      "id": "stats",
+      "name": "Stats",
+      "description": "GET /stats.json \u2014 stigmergy pheromone (open counts, fees, top pairs).",
+      "tags": [
+        "stats",
+        "pheromone"
+      ],
+      "examples": [
+        "Show desk pheromone stats"
+      ],
+      "inputModes": [
+        "application/json",
+        "text/plain"
+      ],
+      "outputModes": [
+        "application/json"
+      ]
+    },
+    {
+      "id": "resurrect",
+      "name": "Resurrect",
+      "description": "Fetch an open Echo (HTTP 402 invoice unless paid; ?preview=1 free). Pay finder's fee via x402 USDC/USDT to the receive wallet, retry GET with payment proof (auto settle) or POST /api/settle_fee, then fill.",
+      "tags": [
+        "x402",
+        "defi",
+        "fill"
+      ],
+      "examples": [
+        "Resurrect echo_\u2026 with x402 USDC fee"
+      ],
+      "inputModes": [
+        "application/json"
+      ],
+      "outputModes": [
+        "application/json"
+      ]
+    },
+    {
+      "id": "quote_fee",
+      "name": "Quote Fee (OBO)",
+      "description": "POST https://dualregistry.dev/api/quote_fee \u2014 live OBO. Exploratory (no firm): 200 indicative ask/floor. Firm (quote_bond_usdc=0, no bond): bid>=ask \u2192 HTTP 402 accept invoice {amount=final_usdc, quote_id, receive_wallet, preferred USDC/Base + USDT/BSC}; floor<=bid<ask \u2192 200 counter; bid<floor \u2192 422. Rate limit ~10/10min. Schema: /fee_quote.schema.json. OrphanDust flat unlocks: /ORPHANDUST.json. Waiver path retained (moot at bond=0).",
+      "tags": [
+        "x402",
+        "fee",
+        "obo",
+        "negotiation"
+      ],
+      "examples": [
+        "Bid 15 bps on echo_\u2026",
+        "Counter fee quote for echo_\u2026"
+      ],
+      "inputModes": [
+        "application/json"
+      ],
+      "outputModes": [
+        "application/json"
+      ],
+      "endpoint": "https://dualregistry.dev/api/quote_fee",
+      "method": "POST"
+    },
+    {
+      "id": "counter_fee",
+      "name": "Counter Fee (OBO)",
+      "description": "POST https://dualregistry.dev/api/counter_fee \u2014 same live OBO rules as quote_fee (alias). Accept returns HTTP 402 invoice (not 200 tip-jar). Firm quotes: quote_bond_usdc=0 (no bond).",
+      "tags": [
+        "x402",
+        "fee",
+        "obo",
+        "negotiation"
+      ],
+      "examples": [
+        "Counter with bid_bps=12"
+      ],
+      "inputModes": [
+        "application/json"
+      ],
+      "outputModes": [
+        "application/json"
+      ],
+      "endpoint": "https://dualregistry.dev/api/counter_fee",
+      "method": "POST"
+    },
+    {
+      "id": "settle_fee",
+      "name": "Settle Fee (x402 receipt)",
+      "description": "POST https://dualregistry.dev/api/settle_fee \u2014 attest a paid finder's fee in USDC or USDT. Request {echo_id|quote_id, tx_hash, chain, amount_usdc|amount, asset?: USDC|USDT, payer?} \u2192 receipt JSON (receipt.schema.json, example=false) with fee.asset + collected_usd. Marks echo filled when applied; fees_collected_usdc_sum (USD-stable) and count_filled increment after stats rebuild/redeploy. Desk accepts USDC/USDT on ETH/Base/BSC to 0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb. Quote/x402 stay USDC-primary.",
+      "tags": [
+        "x402",
+        "fee",
+        "settle",
+        "receipt",
+        "USDT",
+        "USDC"
+      ],
+      "examples": [
+        "Settle echo_\u2026 with tx 0x\u2026 on bsc for 0.25 USDT",
+        "Settle echo_\u2026 with tx 0x\u2026 on base for 1.25 USDC"
+      ],
+      "inputModes": [
+        "application/json"
+      ],
+      "outputModes": [
+        "application/json"
+      ],
+      "endpoint": "https://dualregistry.dev/api/settle_fee",
+      "method": "POST"
+    },
+    {
+      "id": "fill_hint",
+      "name": "Fill Hint",
+      "description": "GET /fill_hint.json \u2014 catalog of executable fill_hint for every open (post-filter) Echo (chain, sell/buy, fee quote, pay/402 + settle URLs), plus top spotlight fields.",
+      "tags": [
+        "discovery",
+        "defi",
+        "cow"
+      ],
+      "examples": [
+        "Fetch fill_hint for top open Echo"
+      ],
+      "inputModes": [
+        "application/json",
+        "text/plain"
+      ],
+      "outputModes": [
+        "application/json"
+      ]
+    },
+    {
+      "id": "redeem",
+      "name": "Redeem (one-shot)",
+      "description": "One-shot redeem: GET /index.json \u2192 pick echo_id \u2192 optional POST /api/quote_fee (exploratory or firm+bond; accept\u2192402 invoice with quote_id) \u2192 pay x402 (USDC Base preferred or USDT BSC) \u2192 GET /api/echo?echo_id=\u2026 with X-PAYMENT-TX + X-PAYMENT-CHAIN (+ optional X-QUOTE-ID) \u2192 auto settle_fee + full legs + receipt. Without payment proof, open Echo GETs stay 402. Free catalogs sealed (legs_locked). Free preview: ?preview=1. First-fill promo ask_bps=10 / floor_bps=5 / floor $0.25 while PROMO active.",
+      "tags": [
+        "x402",
+        "redeem",
+        "defi",
+        "one-shot",
+        "promo"
+      ],
+      "examples": [
+        "Redeem top open Echo via x402 one-shot",
+        "List \u2192 pick \u2192 pay \u2192 unlock echo_\u2026"
+      ],
+      "inputModes": [
+        "application/json"
+      ],
+      "outputModes": [
+        "application/json"
+      ],
+      "endpoint": "https://dualregistry.dev/api/echo",
+      "method": "GET",
+      "flow": [
+        "GET /index.json",
+        "optional POST /api/quote_fee",
+        "pay USDC on Base (or USDT on BSC) to receive wallet",
+        "GET /api/echo?echo_id=\u2026 with X-PAYMENT-TX + X-PAYMENT-CHAIN",
+        "receive full echo + receipt"
+      ]
+    },
+    {
+      "id": "feedback",
+      "name": "Agent Feedback",
+      "description": "POST https://dualregistry.dev/api/feedback \u2014 structured agent feedback {agent_id, stage, outcome, note?, echo_id?, quote_id?}. Stages: preview|quote|bond|paywall_402|settle|fill|skip. Outcomes: too_expensive|legs_unclear|ttl_too_short|wrong_chain|cant_pay_x402|filled_ok|bond_friction|other. Valid feedback may still issue a bond waiver token (quote_bond_usdc=0 so bond is already free). Public: GET /FEEDBACK.json. Rate limit ~5/10min.",
+      "tags": [
+        "feedback",
+        "x402",
+        "bond",
+        "waiver",
+        "pheromone"
+      ],
+      "examples": [
+        "Report bond_friction after firm quote 402",
+        "POST feedback filled_ok after settle"
+      ],
+      "inputModes": [
+        "application/json"
+      ],
+      "outputModes": [
+        "application/json"
+      ],
+      "endpoint": "https://dualregistry.dev/api/feedback",
+      "method": "POST"
+    },
+    {
+      "id": "orphandust",
+      "name": "OrphanDust Micro-SKU",
+      "description": "GET https://dualregistry.dev/ORPHANDUST.json \u2014 fixed unlock credits (od_unlock_050=$0.50/1cr, od_credits_1=$1/1cr, od_credits_2=$3/2cr, od_credits_3=$5/3cr). POST /api/orphandust/buy {sku, agent_id?} \u2192 HTTP 402 invoice; after X-PAYMENT-* \u2192 {ok, credits, credit_token, receipt}. POST /api/orphandust/unlock {echo_id, credit_token} or GET /api/echo?credit_token= consumes 1 credit for full legs (no % fee). quote_bond_usdc=0. % fee path (ask 10 bps) still live.",
+      "tags": [
+        "orphandust",
+        "x402",
+        "micro-sku",
+        "credits",
+        "unlock"
+      ],
+      "examples": [
+        "Buy od_unlock_050 flat $0.50 Echo unlock",
+        "Unlock echo_\u2026 with OrphanDust credit_token"
+      ],
+      "inputModes": [
+        "application/json"
+      ],
+      "outputModes": [
+        "application/json"
+      ],
+      "endpoint": "https://dualregistry.dev/api/orphandust/buy",
+      "method": "POST"
+    },
+    {
+      "id": "buy_unlock",
+      "name": "Buy Unlock Credits",
+      "description": "Alias of orphandust: purchase fixed unlock credits then spend via /api/orphandust/unlock or /api/echo?credit_token=. Catalog: /PRODUCT.json.",
+      "tags": [
+        "orphandust",
+        "buy",
+        "unlock",
+        "x402"
+      ],
+      "examples": [
+        "Buy 3 unlock credits for $5"
+      ],
+      "inputModes": [
+        "application/json"
+      ],
+      "outputModes": [
+        "application/json"
+      ],
+      "endpoint": "https://dualregistry.dev/api/orphandust/buy",
+      "method": "POST"
+    }
+  ],
+  "services": [
+    {
+      "name": "web",
+      "endpoint": "https://dualregistry.dev/"
+    },
+    {
+      "name": "echo-index",
+      "endpoint": "https://dualregistry.dev/index.json",
+      "description": "Catalog of open Intent Echoes (list_echoes) \u2014 free; \u2265$2k gate"
+    },
+    {
+      "name": "echo-stats",
+      "endpoint": "https://dualregistry.dev/stats.json",
+      "description": "Stigmergy pheromone stats (stats skill)"
+    },
+    {
+      "name": "fill-hint",
+      "endpoint": "https://dualregistry.dev/fill_hint.json",
+      "description": "Complementary CoW fill hint (playbook #9)"
+    },
+    {
+      "name": "fee-quote-schema",
+      "endpoint": "https://dualregistry.dev/fee_quote.schema.json",
+      "description": "OBO quote_fee / counter_fee schema"
+    },
+    {
+      "name": "A2A",
+      "endpoint": "https://dualregistry.dev/.well-known/agent-card.json",
+      "version": "0.3.0",
+      "a2aSkills": [
+        "resurrect",
+        "list_echoes",
+        "stats",
+        "quote_fee",
+        "counter_fee",
+        "fill_hint",
+        "settle_fee",
+        "redeem"
+      ]
+    },
+    {
+      "name": "agentWallet",
+      "endpoint": "eip155:1:0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb"
+    },
+    {
+      "name": "agentWallet",
+      "endpoint": "eip155:8453:0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb"
+    },
+    {
+      "name": "agentWallet",
+      "endpoint": "eip155:56:0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb"
+    },
+    {
+      "name": "quote-fee",
+      "endpoint": "https://dualregistry.dev/api/quote_fee",
+      "description": "Live OBO quote_fee POST"
+    },
+    {
+      "name": "counter-fee",
+      "endpoint": "https://dualregistry.dev/api/counter_fee",
+      "description": "Live OBO counter_fee POST"
+    },
+    {
+      "name": "settle-fee",
+      "endpoint": "https://dualregistry.dev/api/settle_fee",
+      "description": "Live settle_fee POST \u2014 USDC/USDT receipt attestation"
+    },
+    {
+      "name": "echo-api",
+      "endpoint": "https://dualregistry.dev/api/echo",
+      "description": "x402 paywalled Echo GET \u2014 402 invoice / preview / auto-settle unlock"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "index",
+      "url": "https://dualregistry.dev/index.json"
+    },
+    {
+      "name": "stats",
+      "url": "https://dualregistry.dev/stats.json"
+    },
+    {
+      "name": "fill_hint",
+      "url": "https://dualregistry.dev/fill_hint.json"
+    },
+    {
+      "name": "PROMO",
+      "url": "https://dualregistry.dev/PROMO.json"
+    },
+    {
+      "name": "agent-card",
+      "url": "https://dualregistry.dev/.well-known/agent-card.json"
+    },
+    {
+      "name": "quote_fee",
+      "url": "https://dualregistry.dev/api/quote_fee"
+    },
+    {
+      "name": "counter_fee",
+      "url": "https://dualregistry.dev/api/counter_fee"
+    },
+    {
+      "name": "fee_quote",
+      "url": "https://dualregistry.dev/api/fee_quote"
+    },
+    {
+      "name": "fee_quote_schema",
+      "url": "https://dualregistry.dev/fee_quote.schema.json"
+    },
+    {
+      "name": "settle_fee",
+      "url": "https://dualregistry.dev/api/settle_fee"
+    },
+    {
+      "name": "echo_api",
+      "url": "https://dualregistry.dev/api/echo"
+    },
+    {
+      "name": "redeem",
+      "url": "https://dualregistry.dev/api/echo"
+    }
+  ],
+  "supportedTrust": [
+    "reputation",
+    "crypto-economic"
+  ],
+  "registration_status": "off_chain_file_only",
+  "registration_note": "Off-chain ERC-8004 registration FILE only \u2014 ready to register on-chain later when gas exists. No on-chain agentId is claimed; registrations[] omitted intentionally (no fake agentId).",
+  "updatedAt": "2026-09-17T21:53:08Z",
+  "updated_at_iso": "2026-09-17T21:53:08Z",
+  "desk": "Scro Orphan Desk",
+  "operator": "Christopher Hatton / Scro",
+  "public_feed": "https://dualregistry.dev",
+  "url": "https://dualregistry.dev/",
+  "version": "1.2.0",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
+  },
+  "protocolVersion": "0.3.0",
+  "author": "Christopher Hatton / Scro",
+  "wellKnownURI": "https://dualregistry.dev/.well-known/agent-card.json",
+  "documentationUrl": "https://dualregistry.dev/llms.txt",
+  "homepage": "https://dualregistry.dev/",
+  "repository": "https://github.com/manhatton31-svg/stigmergic-exponential-economist/tree/main/orphan-desk-echo",
+  "license": "MIT",
+  "provider": {
+    "organization": "Scro Orphan Desk",
+    "url": "https://dualregistry.dev/"
+  },
+  "defaultInputModes": [
+    "application/json",
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "application/json"
+  ],
+  "skill_ids": [
+    "list_echoes",
+    "stats",
+    "resurrect",
+    "quote_fee",
+    "counter_fee",
+    "settle_fee",
+    "fill_hint",
+    "redeem",
+    "orphandust",
+    "buy_unlock",
+    "feedback"
+  ],
+  "obo_fee": {
+    "obo": true,
+    "ask_bps": 10,
+    "floor_bps": 5,
+    "receive_address": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
+    "ttl_seconds": 1200,
+    "counter_rule": "midpoint_ceil",
+    "promo": "first_fill",
+    "endpoints": {
+      "quote_fee": "https://dualregistry.dev/api/quote_fee",
+      "counter_fee": "https://dualregistry.dev/api/counter_fee",
+      "fee_quote": "https://dualregistry.dev/api/fee_quote",
+      "schema": "https://dualregistry.dev/fee_quote.schema.json",
+      "settle_fee": "https://dualregistry.dev/api/settle_fee",
+      "echo": "https://dualregistry.dev/api/echo"
+    },
+    "quote_bond_usdc": 0,
+    "orphandust": "https://dualregistry.dev/ORPHANDUST.json"
+  },
+  "alternate_hosts": [
+    "https://orphan-desk-echo.vercel.app"
+  ],
+  "alternate_note": "Primary canonical host is dualregistry.dev; orphan-desk-echo.vercel.app remains an optional alternate endpoint on the same Vercel project.",
+  "first_fill_promo": {
+    "active": true,
+    "name": "first_fill",
+    "ask_bps": 10,
+    "floor_bps": 5,
+    "floor_usdc": 0.25,
+    "promo_url": "https://dualregistry.dev/PROMO.json",
+    "fees_collected_proof_usdc": 0.25,
+    "note": "Honest first-fill magnet while PROMO.active and now < ends_at. See stats.promo."
+  },
+  "x402_paywall": {
+    "index_free": true,
+    "stats_free": true,
+    "echo_get": "HTTP 402 unless paid",
+    "preview": "?preview=1 or /preview/{id}",
+    "auto_settle_on_paid_get": true,
+    "manual_settle": "https://dualregistry.dev/api/settle_fee",
+    "preferred": "USDC on Base",
+    "also_accepts": "USDT on BSC (and USDC/USDT on ETH)",
+    "receive_wallet": "0x459cF7359e37B45A0d2a2479656cD96cdA9F7dBb",
+    "accept_quote": "POST quote_fee firm with bid>=ask \u2192 HTTP 402 invoice (quote_bond_usdc=0)",
+    "after_accept": "Pay then GET with X-PAYMENT-* + optional X-QUOTE-ID to unlock legs",
+    "quote_bond_usdc": "0",
+    "rate_limit": "10 req / 10 min on quote_fee/counter_fee/fee_quote",
+    "orphandust": "https://dualregistry.dev/ORPHANDUST.json"
+  }
 }
